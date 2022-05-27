@@ -52,7 +52,7 @@ class _FloatingMicrophoneInputState extends State<FloatingMicrophoneInput> {
                 if (val == "listening") {
                   chData.changeTextInput("Listening...");
                 } else if (val == "notListening") {
-                  //chData.changeTextInput("...Nothing Heard");
+                  chData.changeListening(false);
                 } else {
                   chData.changeListening(false);
                 }
@@ -64,17 +64,15 @@ class _FloatingMicrophoneInputState extends State<FloatingMicrophoneInput> {
               },
             );
             if (available) {
+              print('available');
               chData.changeListening(true);
-              chData.changeTextInput("Listening...");
 
               await _getLanguageIndex();
               await _speech!.listen(
-                  listenFor: const Duration(seconds: 30),
-                  pauseFor: const Duration(seconds: 5),
                   localeId: chData.languageChoosed,
                   onResult: (val) {
                     print(val);
-                    if (val.hasConfidenceRating && val.confidence > 0.5) {
+                    if (val.hasConfidenceRating && val.confidence > 0) {
                       if (val.recognizedWords.contains(other)) {
                         String trimadaStringada = NumberToWord().convert('en-in', int.parse(val.recognizedWords));
                         chData.changeTextInput(trimadaStringada.trim());

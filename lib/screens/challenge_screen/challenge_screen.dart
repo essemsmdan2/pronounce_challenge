@@ -189,7 +189,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                             style: kBiglittleTextStyle,
                           ),
                         )*/
-                        const SizedBox(height: 90),
+                        const SizedBox(height: 5),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5.2),
                           child: ButtonsInRow(

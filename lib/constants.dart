@@ -7,3 +7,4 @@ TextStyle kBigTextStyle = const TextStyle(color: Colors.black, fontSize: 40, fon
 TextStyle kBiglittleTextStyle = const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w500);
 TextStyle kSecondaryTextStyle = const TextStyle(color: Colors.white, fontSize: 20);
 TextStyle kAppBarTextStyle = kPrimaryTextStyle.copyWith(fontSize: 20, letterSpacing: 5, fontWeight: FontWeight.bold);
+TextStyle kButtonTextStyle = kPrimaryTextStyle.copyWith(fontSize: 15, letterSpacing: 5, fontWeight: FontWeight.bold);
