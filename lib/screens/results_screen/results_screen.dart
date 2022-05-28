@@ -155,6 +155,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
 }
 
 Future saveAndShare(Uint8List bytes) async {
+  var test = "test";
   final directory = await getApplicationDocumentsDirectory();
   final image = File("${directory.path}/flutter.png");
   image.writeAsBytesSync(bytes);
