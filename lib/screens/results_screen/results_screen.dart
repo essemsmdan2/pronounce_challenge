@@ -53,7 +53,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
           controller: screenshotController,
           child: Scaffold(
             appBar: AppBar(
-              toolbarHeight: Platform.isIOS? kToolbarHeight:100,
+              toolbarHeight: Platform.isIOS ? kToolbarHeight : 100,
               centerTitle: true,
               title: Text(
                 'RESULT',
@@ -65,82 +65,77 @@ class _ResultsScreenState extends State<ResultsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-
-                        ScreenShootableResult(
-                          chData: chData,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Row(
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, DetailScreen.id);
-                                },
-                                child: Text(
-                                  "Details",
-                                  style: kAppBarTextStyle.copyWith(fontSize: 20, letterSpacing: 2, color: kSecondaryColorStyle),
-                                ),
-                              ),
-                            ],
+                  ScreenShootableResult(
+                    chData: chData,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, DetailScreen.id);
+                          },
+                          child: Text(
+                            "Details",
+                            style: kAppBarTextStyle.copyWith(fontSize: 20, letterSpacing: 2, color: kSecondaryColorStyle),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
+                            ),
+                            onPressed: () {
+                              chData.resetWorldConts();
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        widget.contextscreen ??
+                                        ChallengeScreen(
+                                          challengeQnt: 10,
+                                        )),
+                                ModalRoute.withName("" + SelectionScreen.id),
+                              );
+                            },
+                            child: Text(
+                              'RESTART',
+                              style: kButtonTextStyle,
+                            )),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, SelectionScreen.id);
+                            },
+                            child: Text(
+                              'MENU',
+                              style: kButtonTextStyle,
+                            )),
+                        ElevatedButton(
+                            onPressed: () async {
+                              final image = await screenshotController.capture();
 
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton(
-                                  style: ButtonStyle(
-                                    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
-                                  ),
-                                  onPressed: () {
-                                    chData.resetWorldConts();
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              widget.contextscreen ??
-                                              ChallengeScreen(
-                                                challengeQnt: 10,
-                                              )),
-                                      ModalRoute.withName("" + SelectionScreen.id),
-                                    );
-                                  },
-                                  child: Text(
-                                    'RESTART',
-                                    style: kButtonTextStyle,
-                                  )),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, SelectionScreen.id);
-                                  },
-                                  child: Text(
-                                    'MENU',
-                                    style: kButtonTextStyle,
-                                  )),
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    final image = await screenshotController.capture();
-
-                                    if (image == null) return;
-                                    saveAndShare(image);
-                                  },
-                                  child: Text(
-                                    'SHARE',
-                                    style: kButtonTextStyle,
-                                  )),
-                            ],
-                          ),
-                        ),
-
+                              if (image == null) return;
+                              saveAndShare(image);
+                            },
+                            child: Text(
+                              'SHARE',
+                              style: kButtonTextStyle,
+                            )),
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: AdWidget(ad: myBanner),
                   )
-
-
                 ],
               ),
             ),

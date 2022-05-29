@@ -63,7 +63,7 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
     // TODO: implement initState
     super.initState();
     loadRewardAd();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).setevilWordIndexText(_indexCount);
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
       print(Provider.of<ChallengeData>(context, listen: false).evilWordArray);

@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -27,27 +30,10 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
 
   String? localAudioCacheURI;
   late RewardedAd rewardedAd;
+
   void loadRewardAd() {
     RewardedAd.load(
-
-        adUnitId:'ca-app-pub-3940256099942544/1712485313',
-        request: const AdRequest(),
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-          onAdLoaded: (RewardedAd ad) {
-            print('$ad loaded.');
-            // Keep a reference to the ad so you can show it later.
-            rewardedAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('RewardedAd failed to load: $error');
-          },
-        ));
-  }
-
-  void loadRewardAdIos() {
-    RewardedAd.load(
-
-        adUnitId:'ca-app-pub-3940256099942544/1712485313',
+        adUnitId: defaultTargetPlatform == TargetPlatform.android ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313',
         request: const AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
@@ -72,8 +58,7 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
     // TODO: implement initState
     super.initState();
 
-   loadRewardAd();
-
+    loadRewardAd();
   }
 
   @override

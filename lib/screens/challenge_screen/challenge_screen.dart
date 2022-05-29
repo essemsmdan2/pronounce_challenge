@@ -32,7 +32,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
     super.initState();
     myBanner.load();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).nextRandomText();
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
       Provider.of<ChallengeData>(context, listen: false).resetChallengeNumber();
