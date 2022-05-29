@@ -53,7 +53,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
           controller: screenshotController,
           child: Scaffold(
             appBar: AppBar(
-              toolbarHeight: 100,
+              toolbarHeight: Platform.isIOS? kToolbarHeight:100,
               centerTitle: true,
               title: Text(
                 'RESULT',
@@ -61,14 +61,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
               ),
             ),
             body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 35),
+              padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Expanded(
-                    child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
 
-                      children: [
                         ScreenShootableResult(
                           chData: chData,
                         ),
@@ -88,62 +85,62 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                                style: ButtonStyle(
-                                  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
-                                ),
-                                onPressed: () {
-                                  chData.resetWorldConts();
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            widget.contextscreen ??
-                                            ChallengeScreen(
-                                              challengeQnt: 10,
-                                            )),
-                                    ModalRoute.withName("" + SelectionScreen.id),
-                                  );
-                                },
-                                child: Text(
-                                  'RESTART',
-                                  style: kButtonTextStyle,
-                                )),
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, SelectionScreen.id);
-                                },
-                                child: Text(
-                                  'MENU',
-                                  style: kButtonTextStyle,
-                                )),
-                            ElevatedButton(
-                                onPressed: () async {
-                                  final image = await screenshotController.capture();
 
-                                  if (image == null) return;
-                                  saveAndShare(image);
-                                },
-                                child: Text(
-                                  'SHARE',
-                                  style: kButtonTextStyle,
-                                )),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
+                                  ),
+                                  onPressed: () {
+                                    chData.resetWorldConts();
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              widget.contextscreen ??
+                                              ChallengeScreen(
+                                                challengeQnt: 10,
+                                              )),
+                                      ModalRoute.withName("" + SelectionScreen.id),
+                                    );
+                                  },
+                                  child: Text(
+                                    'RESTART',
+                                    style: kButtonTextStyle,
+                                  )),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, SelectionScreen.id);
+                                  },
+                                  child: Text(
+                                    'MENU',
+                                    style: kButtonTextStyle,
+                                  )),
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    final image = await screenshotController.capture();
+
+                                    if (image == null) return;
+                                    saveAndShare(image);
+                                  },
+                                  child: Text(
+                                    'SHARE',
+                                    style: kButtonTextStyle,
+                                  )),
+                            ],
+                          ),
+                        ),
+
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: AdWidget(ad: myBanner),
                   )
+
+
                 ],
               ),
             ),

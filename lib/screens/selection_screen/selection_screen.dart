@@ -29,7 +29,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
     // TODO: implement initState
     super.initState();
     myBanner.load();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).updateEvilWordsFromSharedPreferences();
 
       if (Provider.of<ChallengeData>(context, listen: false).evilWordArray.isNotEmpty) {

@@ -68,7 +68,7 @@ class ScreenShootableResult extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20, top: 30),
+          padding: const EdgeInsets.only(left: 20, top: 20),
           child: SizedBox(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

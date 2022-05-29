@@ -29,7 +29,25 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
   late RewardedAd rewardedAd;
   void loadRewardAd() {
     RewardedAd.load(
-        adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+
+        adUnitId:'ca-app-pub-3940256099942544/1712485313',
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (RewardedAd ad) {
+            print('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            rewardedAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('RewardedAd failed to load: $error');
+          },
+        ));
+  }
+
+  void loadRewardAdIos() {
+    RewardedAd.load(
+
+        adUnitId:'ca-app-pub-3940256099942544/1712485313',
         request: const AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
@@ -53,7 +71,9 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadRewardAd();
+
+   loadRewardAd();
+
   }
 
   @override
