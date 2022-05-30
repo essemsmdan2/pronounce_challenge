@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +9,7 @@ import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/challenge_screen/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/results_screen/results_screen.dart';
 import 'package:pronounce_challenge/screens/selection_screen/selection_screen.dart';
-import 'package:pronounce_challenge/user_preferences.dart';
+
 import 'package:provider/provider.dart';
 
 class ButtonsInRow extends StatefulWidget {
@@ -33,7 +33,9 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
 
   void loadRewardAd() {
     RewardedAd.load(
-        adUnitId: defaultTargetPlatform == TargetPlatform.android ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313',
+        adUnitId: Platform.isIOS
+            ? "ca-app-pub-1426529590077720/8213597940"
+            : "ca-app-pub-3940256099942544/5224354917",
         request: const AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
@@ -48,8 +50,26 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
   }
 
   void showRewardAd() {
-    rewardedAd.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+    rewardedAd.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (RewardedAd ad) =>
+          print('$ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (RewardedAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        loadRewardAd();
+      },
+      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        loadRewardAd();
+      },
+      onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
+    );
+    rewardedAd!.setImmersiveMode(true);
+    rewardedAd!.show(
+        onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
       // Reward the user for watching an ad.
+      print("${rewardItem.amount} ${rewardItem.type}");
     });
   }
 
@@ -70,7 +90,9 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
         return Row(
           children: [
             ElevatedButton(
-              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speak() : null,
+              onPressed: chData.trys > 0 && !chData.isListening
+                  ? () => chData.speak()
+                  : null,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
@@ -84,7 +106,9 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
               width: 10,
             ),
             ElevatedButton(
-              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakSlow() : null,
+              onPressed: chData.trys > 0 && !chData.isListening
+                  ? () => chData.speakSlow()
+                  : null,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
@@ -114,8 +138,11 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
             ElevatedButton(
               onPressed: () {
                 if (chData.challengeNumber == widget.challengeQnt) {
-                  showRewardAd();
-
+                  try {
+                    showRewardAd();
+                  } catch (e) {
+                    print(e);
+                  }
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

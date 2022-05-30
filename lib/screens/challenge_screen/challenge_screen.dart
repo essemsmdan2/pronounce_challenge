@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
+import 'dart:io';
 import 'package:pronounce_challenge/constants.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +12,7 @@ import 'floating_microphone.dart';
 class ChallengeScreen extends StatefulWidget {
   static String id = "Challenge Screen";
   late int challengeQnt;
+
   ChallengeScreen({Key? key, required this.challengeQnt}) : super(key: key);
 
   @override
@@ -20,7 +21,9 @@ class ChallengeScreen extends StatefulWidget {
 
 class _ChallengeScreenState extends State<ChallengeScreen> {
   final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+    adUnitId: Platform.isIOS
+        ? "ca-app-pub-3940256099942544/2934735716"
+        : 'ca-app-pub-3940256099942544/6300978111',
     size: AdSize.banner,
     request: const AdRequest(),
     listener: const BannerAdListener(),
@@ -81,7 +84,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
             floatingActionButton: FloatingMicrophoneInput(
               screenContext: ChallengeScreen.id,
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
             body: Column(
               children: [
                 const SizedBox(
@@ -90,7 +94,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                 SizedBox(
                   height: 100,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -103,7 +108,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     chData.textInput,
-                                    style: kPrimaryTextStyle.copyWith(fontSize: 25),
+                                    style: kPrimaryTextStyle.copyWith(
+                                        fontSize: 25),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -155,13 +161,16 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                 height: 80,
                                 width: 80,
                                 child: Card(
-                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50))),
                                   elevation: 10,
                                   color: kPrimaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "${chData.trys}",
@@ -191,7 +200,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                         )*/
                         const SizedBox(height: 5),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5.2),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 5.2),
                           child: ButtonsInRow(
                             challengeQnt: widget.challengeQnt,
                           ),
@@ -212,7 +222,9 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                       gradientBegin: Alignment.bottomLeft,
                       gradientEnd: Alignment.topRight,
                       durations: [35000, 19440, 10800, 6000],
-                      heightPercentages: chData.isListening ? [0.20, 0.23, 0.25, 0.3] : [10, 10, 10, 10],
+                      heightPercentages: chData.isListening
+                          ? [0.20, 0.23, 0.25, 0.3]
+                          : [10, 10, 10, 10],
                       blur: const MaskFilter.blur(BlurStyle.outer, 10),
                     ),
                     waveAmplitude: 0,
