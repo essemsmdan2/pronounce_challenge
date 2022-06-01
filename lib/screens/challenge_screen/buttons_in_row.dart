@@ -65,8 +65,8 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
       },
       onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
     );
-    rewardedAd!.setImmersiveMode(true);
-    rewardedAd!.show(
+    rewardedAd.setImmersiveMode(true);
+    rewardedAd.show(
         onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
       // Reward the user for watching an ad.
       print("${rewardItem.amount} ${rewardItem.type}");

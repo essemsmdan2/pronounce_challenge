@@ -200,6 +200,8 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>NSMicrophoneUsageDescription</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to the photo library to save and share the results of your challenge in the Gallery</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>NSSpeechRecognitionUsageDescription</string>
 </dict>

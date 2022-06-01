@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/challenge_screen/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/details_screen/detail_screen.dart';
@@ -61,7 +59,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
               ),
             ),
             body: Padding(
-              padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 0),
+              padding: const EdgeInsets.only(
+                  top: 30.0, left: 15, right: 15, bottom: 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -78,7 +77,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
                           },
                           child: Text(
                             "Details",
-                            style: kAppBarTextStyle.copyWith(fontSize: 20, letterSpacing: 2, color: kSecondaryColorStyle),
+                            style: kAppBarTextStyle.copyWith(
+                                fontSize: 20,
+                                letterSpacing: 2,
+                                color: kSecondaryColorStyle),
                           ),
                         ),
                       ],
@@ -90,7 +92,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       children: [
                         ElevatedButton(
                             style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(5)),
                             ),
                             onPressed: () {
                               chData.resetWorldConts();
@@ -119,7 +122,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             )),
                         ElevatedButton(
                             onPressed: () async {
-                              final image = await screenshotController.capture();
+                              final image =
+                                  await screenshotController.capture();
 
                               if (image == null) return;
                               saveAndShare(image);
@@ -154,14 +158,4 @@ Future saveAndShare(Uint8List bytes) async {
 
   final text = "Implement this text later";
   await Share.shareFiles([image.path], text: text);
-}
-
-Future<String> saveImage(Uint8List bytes) async {
-  await [Permission.storage].request();
-  final time = DateTime.now().toIso8601String().replaceAll('.', '-').replaceAll(':', '-');
-
-  final name = 'screenshot_$time';
-  final result = await ImageGallerySaver.saveImage(bytes, name: name);
-  print(result['filePath']);
-  return result['filePath'];
 }
