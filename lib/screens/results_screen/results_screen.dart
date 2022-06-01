@@ -13,6 +13,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../constants.dart';
+import '../../widget/admob_manager.dart';
 import 'ScreenShootableResult.dart';
 
 class ResultsScreen extends StatefulWidget {
@@ -29,18 +30,12 @@ class ResultsScreen extends StatefulWidget {
 class _ResultsScreenState extends State<ResultsScreen> {
   ScreenshotController screenshotController = ScreenshotController();
 
-  final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3940256099942544/6300978111',
-    size: AdSize.banner,
-    request: const AdRequest(),
-    listener: const BannerAdListener(),
-  );
-
+  AdManager adManager = AdManager();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    myBanner.load();
+    adManager.addAds(false, true, false);
   }
 
   @override
@@ -59,8 +54,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
               ),
             ),
             body: Padding(
-              padding: const EdgeInsets.only(
-                  top: 30.0, left: 15, right: 15, bottom: 0),
+              padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -77,10 +71,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                           },
                           child: Text(
                             "Details",
-                            style: kAppBarTextStyle.copyWith(
-                                fontSize: 20,
-                                letterSpacing: 2,
-                                color: kSecondaryColorStyle),
+                            style: kAppBarTextStyle.copyWith(fontSize: 20, letterSpacing: 2, color: kSecondaryColorStyle),
                           ),
                         ),
                       ],
@@ -92,8 +83,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       children: [
                         ElevatedButton(
                             style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.all(5)),
+                              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
                             ),
                             onPressed: () {
                               chData.resetWorldConts();
@@ -122,8 +112,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             )),
                         ElevatedButton(
                             onPressed: () async {
-                              final image =
-                                  await screenshotController.capture();
+                              final image = await screenshotController.capture();
 
                               if (image == null) return;
                               saveAndShare(image);
@@ -135,11 +124,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: AdWidget(ad: myBanner),
-                  )
+                  adManager.showBannerWidget()
                 ],
               ),
             ),

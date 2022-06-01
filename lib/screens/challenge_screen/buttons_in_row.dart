@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/challenge_screen/challenge_screen.dart';
@@ -11,6 +8,8 @@ import 'package:pronounce_challenge/screens/results_screen/results_screen.dart';
 import 'package:pronounce_challenge/screens/selection_screen/selection_screen.dart';
 
 import 'package:provider/provider.dart';
+
+import '../../widget/admob_manager.dart';
 
 class ButtonsInRow extends StatefulWidget {
   int challengeQnt;
@@ -29,56 +28,12 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
   String? localFilePath;
 
   String? localAudioCacheURI;
-  late RewardedAd rewardedAd;
-
-  void loadRewardAd() {
-    RewardedAd.load(
-        adUnitId: Platform.isIOS
-            ? "ca-app-pub-1426529590077720/8213597940"
-            : "ca-app-pub-3940256099942544/5224354917",
-        request: const AdRequest(),
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-          onAdLoaded: (RewardedAd ad) {
-            print('$ad loaded.');
-            // Keep a reference to the ad so you can show it later.
-            rewardedAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('RewardedAd failed to load: $error');
-          },
-        ));
-  }
-
-  void showRewardAd() {
-    rewardedAd.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) =>
-          print('$ad onAdShowedFullScreenContent.'),
-      onAdDismissedFullScreenContent: (RewardedAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
-        ad.dispose();
-        loadRewardAd();
-      },
-      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        print('$ad onAdFailedToShowFullScreenContent: $error');
-        ad.dispose();
-        loadRewardAd();
-      },
-      onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
-    );
-    rewardedAd.setImmersiveMode(true);
-    rewardedAd.show(
-        onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
-      // Reward the user for watching an ad.
-      print("${rewardItem.amount} ${rewardItem.type}");
-    });
-  }
+  AdManager adManager = AdManager();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    loadRewardAd();
+    adManager.addAds(false, false, true);
   }
 
   @override
@@ -90,9 +45,7 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
         return Row(
           children: [
             ElevatedButton(
-              onPressed: chData.trys > 0 && !chData.isListening
-                  ? () => chData.speak()
-                  : null,
+              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speak() : null,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
@@ -106,9 +59,7 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
               width: 10,
             ),
             ElevatedButton(
-              onPressed: chData.trys > 0 && !chData.isListening
-                  ? () => chData.speakSlow()
-                  : null,
+              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakSlow() : null,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
@@ -139,10 +90,11 @@ class _ButtonsInRowState extends State<ButtonsInRow> {
               onPressed: () {
                 if (chData.challengeNumber == widget.challengeQnt) {
                   try {
-                    showRewardAd();
+                    adManager.showRewardedAd();
                   } catch (e) {
-                    print(e);
+                    print("this is the error i'm looking for $e");
                   }
+
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

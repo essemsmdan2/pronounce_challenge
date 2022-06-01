@@ -7,6 +7,7 @@ import 'package:pronounce_challenge/screens/details_screen/detail_screen.dart';
 import 'package:pronounce_challenge/screens/evil_words/evil_words_challenge.dart';
 import 'package:pronounce_challenge/screens/onboarding_screen.dart';
 import 'package:pronounce_challenge/screens/results_screen/results_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen/choose_qnt.dart';
 import 'package:pronounce_challenge/screens/selection_screen/selection_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,7 @@ class _PronounceChallengeState extends State<PronounceChallenge> {
           ResultsScreen.id: (context) => ResultsScreen(),
           SelectionScreen.id: (context) => const SelectionScreen(),
           OnBoardingPage.id: (context) => OnBoardingPage(),
+          ChooseQnt.id: (context) => ChooseQnt(),
           EvilWordsScreen.id: (context) => const EvilWordsScreen(),
         },
       ),
