@@ -114,7 +114,12 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             )),
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, SelectionScreen.id);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectionScreen()),
+                                ModalRoute.withName(""),
+                              );
                             },
                             child: Text(
                               'MENU',
