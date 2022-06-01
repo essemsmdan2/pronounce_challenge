@@ -6,6 +6,7 @@ import 'package:pronounce_challenge/widget/button_widget.dart';
 
 class OnBoardingPage extends StatelessWidget {
   static String id = "onBoardingPage";
+
   @override
   Widget build(BuildContext context) => SafeArea(
         child: IntroductionScreen(
@@ -39,7 +40,8 @@ class OnBoardingPage extends StatelessWidget {
               decoration: getPageDecoration(),
             ),
           ],
-          done: const Text('Read', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          done: const Text('Read',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           onDone: () => goToHome(context),
           showSkipButton: true,
           skip: const Text(
@@ -69,9 +71,15 @@ class OnBoardingPage extends StatelessWidget {
     print('setado');
 
     Navigator.pushNamed(context, SelectionScreen.id);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => SelectionScreen()),
+      ModalRoute.withName(""),
+    );
   }
 
-  Widget buildImage(String path) => Center(child: Image.asset(path, width: 350));
+  Widget buildImage(String path) =>
+      Center(child: Image.asset(path, width: 350));
 
   DotsDecorator getDotDecoration() => DotsDecorator(
         color: const Color(0xFFBDBDBD),
