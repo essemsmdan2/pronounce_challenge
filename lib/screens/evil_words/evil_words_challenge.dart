@@ -70,7 +70,7 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
       Provider.of<ChallengeData>(context, listen: false).setresultColor(kPrimaryColor);
-      Provider.of<ChallengeData>(context, listen: false).changeTextInput("Press the button and start Speaking");
+      Provider.of<ChallengeData>(context, listen: false).changeTextInput("Press the Microphone Button");
     });
     myBanner.load();
   }

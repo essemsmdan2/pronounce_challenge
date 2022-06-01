@@ -181,7 +181,7 @@ class ChallengeData extends ChangeNotifier {
       audioCache.play('right.wav');
       setresultColor(Colors.green);
       notifyListeners();
-    } else if (_textInput == "...Try Again" || _textInput == "Listening..." || _textInput == "Press the button and start Speaking") {
+    } else if (_textInput == "...Try Again" || _textInput == "Listening..." || _textInput == "Press the Microphone Button") {
       setresultColor(kPrimaryColor);
       notifyListeners();
     } else {
@@ -221,7 +221,7 @@ class ChallengeData extends ChangeNotifier {
       print('playing again');
       audioCache.play('right.wav');
       setresultColor(Colors.green);
-    } else if (_textInput == "...Try Again" || _textInput == "..." || _textInput == "Press the button and start Speaking") {
+    } else if (_textInput == "...Try Again" || _textInput == "..." || _textInput == "Press the Microphone Button") {
       print('playing again ag');
 
       setresultColor(kPrimaryColor);
@@ -263,5 +263,5 @@ class ChallengeData extends ChangeNotifier {
     notifyListeners();
   }
 
-  String pressText = "Press the button and start Speaking";
+  String pressText = "Press the Microphone Button";
 }
