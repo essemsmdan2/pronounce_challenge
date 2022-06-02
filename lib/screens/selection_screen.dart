@@ -90,7 +90,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                         Navigator.pushNamed(context, OnBoardingPage.id);
                       },
                       child: Text(
-                        'TUTORIAL ',
+                        'INTRO ',
                         style: kAppBarTextStyle,
                       ),
                     ),
