@@ -1,17 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pronounce_challenge/constants.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/screens/challenge_screen/floating_microphone.dart';
-import 'package:pronounce_challenge/screens/results_screen/results_screen.dart';
-import 'package:pronounce_challenge/screens/selection_screen/selection_screen.dart';
+import 'package:pronounce_challenge/screens/floating_microphone.dart';
+import 'package:pronounce_challenge/screens/results_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
-import 'evil_words_buttonsRow.dart';
 
 class EvilWordsScreen extends StatefulWidget {
   static String id = "EvilWords Screen";
@@ -28,51 +25,21 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
     return "${array.length}/${_indexCount + 1}";
   }
 
-  late RewardedAd rewardedAd;
-  void loadRewardAd() {
-    RewardedAd.load(
-        adUnitId: 'ca-app-pub-3940256099942544/5224354917',
-        request: const AdRequest(),
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-          onAdLoaded: (RewardedAd ad) {
-            print('$ad loaded.');
-            // Keep a reference to the ad so you can show it later.
-            rewardedAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('RewardedAd failed to load: $error');
-          },
-        ));
-  }
-
-  void showRewardAd() {
-    rewardedAd.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
-      // Reward the user for watching an ad.
-    });
-  }
-
-  final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3940256099942544/6300978111',
-    size: AdSize.banner,
-    request: const AdRequest(),
-    listener: const BannerAdListener(),
-  );
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadRewardAd();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).setevilWordIndexText(_indexCount);
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
+      //Provider.of<ChallengeData>(context, listen: false).admob.addAds(true, true, true);
       print(Provider.of<ChallengeData>(context, listen: false).evilWordArray);
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
       Provider.of<ChallengeData>(context, listen: false).setresultColor(kPrimaryColor);
       Provider.of<ChallengeData>(context, listen: false).changeTextInput("Press the Microphone Button");
     });
-    myBanner.load();
   }
 
   @override
@@ -205,56 +172,109 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-/*                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            "${chData.printResult(chData.nysiisModified, chData.randomText)}",
-                            style: kBiglittleTextStyle,
-                          ),
-                        )*/
                         const SizedBox(height: 90),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5.2),
-                          child: ButtonsInRowEvil(
-                            callback2: () {
-                              if (chData.evilWordArray.length > 1) {
-                                chData.removeEvilWordInIndex(_indexCount);
-                                UserPreferences.setEvilWords(chData.evilWordArray);
-                              } else {
-                                Navigator.pop(context);
-                                chData.setShowEvilWordMenu(false);
-                                print(chData.showEvilWordsMenu);
-
-                                Timer(Duration(seconds: 1), () {
-                                  chData.resetEvilWordArrayOneUseOnly();
-
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakEvil() : null,
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakSlowEvil() : null,
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.volume_up_outlined,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                chData.changeTextInput(chData.pressText);
+                                chData.setresultColor(kPrimaryColor);
+                                if (_indexCount + 1 >= chData.evilWordArray.length) {
+                                  try {
+                                    chData.admob.showRewardedAd();
+                                  } on Exception catch (e) {
+                                    print(e);
+                                    try {
+                                      chData.admob.showInterstitial();
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  }
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ResultsScreen(
+                                              contextscreen: const EvilWordsScreen(),
+                                            )),
+                                    ModalRoute.withName("" + SelectionScreen.id),
+                                  );
+                                } else {
+                                  setState(() {
+                                    _indexCount++;
+                                    chData.setevilWordIndexText(_indexCount);
+                                  });
+                                }
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.navigate_next,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (chData.evilWordArray.length > 1) {
+                                  chData.showSnackBar(context, chData.evilWordArray[_indexCount], false);
+                                  chData.removeEvilWordInIndex(_indexCount);
                                   UserPreferences.setEvilWords(chData.evilWordArray);
-                                  print('removed');
-                                });
-                              }
-                            },
-                            callback: () {
-                              chData.changeTextInput(chData.pressText);
-                              chData.setresultColor(kPrimaryColor);
-                              if (_indexCount + 1 >= chData.evilWordArray.length) {
-                                showRewardAd();
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ResultsScreen(
-                                            contextscreen: const EvilWordsScreen(),
-                                          )),
-                                  ModalRoute.withName("" + SelectionScreen.id),
-                                );
-                              } else {
-                                setState(() {
-                                  _indexCount++;
-                                  chData.setevilWordIndexText(_indexCount);
-                                });
-                              }
-                            },
-                          ),
-                        )
+                                } else {
+                                  Navigator.pop(context);
+                                  chData.setShowEvilWordMenu(false);
+                                  print(chData.showEvilWordsMenu);
+
+                                  Timer(Duration(seconds: 1), () {
+                                    chData.resetEvilWordArrayOneUseOnly();
+
+                                    UserPreferences.setEvilWords(chData.evilWordArray);
+                                    print('removed');
+                                  });
+                                }
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -277,11 +297,11 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                     waveAmplitude: 0,
                     heightPercentange: 0.2,
                     size: const Size(double.infinity, 50)),
-                SizedBox(
+                /*     SizedBox(
                   width: double.infinity,
                   height: 55,
                   child: AdWidget(ad: myBanner),
-                )
+                )*/
               ],
             ));
       },

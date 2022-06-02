@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants.dart';
+import '../constants.dart';
 
 class ScreenShootableResult extends StatelessWidget {
   ScreenShootableResult({

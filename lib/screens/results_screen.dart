@@ -5,16 +5,16 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/screens/challenge_screen/challenge_screen.dart';
-import 'package:pronounce_challenge/screens/details_screen/detail_screen.dart';
-import 'package:pronounce_challenge/screens/selection_screen/selection_screen.dart';
+import 'package:pronounce_challenge/screens/challenge_screen.dart';
+import 'package:pronounce_challenge/screens/detail_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../constants.dart';
-import '../../widget/admob_manager.dart';
-import 'ScreenShootableResult.dart';
+import '../constants.dart';
+import '../widget/admob_manager.dart';
+import 'screen_shootable_result.dart';
 
 class ResultsScreen extends StatefulWidget {
   static String id = "Results Screen";
@@ -106,8 +106,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => SelectionScreen()),
+                                MaterialPageRoute(builder: (context) => SelectionScreen()),
                                 ModalRoute.withName(""),
                               );
                             },
@@ -141,11 +140,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
 }
 
 Future saveAndShare(Uint8List bytes) async {
-  var test = "test";
   final directory = await getApplicationDocumentsDirectory();
   final image = File("${directory.path}/flutter.png");
   image.writeAsBytesSync(bytes);
 
-  final text = "Implement this text later";
+  final text = "Hey! Check out my results !";
   await Share.shareFiles([image.path], text: text);
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/screens/challenge_screen/challenge_screen.dart';
-import 'package:pronounce_challenge/screens/evil_words/evil_words_challenge.dart';
+import 'package:pronounce_challenge/screens/challenge_screen.dart';
+
 import 'package:pronounce_challenge/screens/onboarding_screen.dart';
-import 'package:pronounce_challenge/screens/selection_screen/choose_qnt.dart';
+import 'package:pronounce_challenge/screens/choose_qnt_screen.dart';
 import 'package:pronounce_challenge/widget/admob_manager.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants.dart';
+import '../constants.dart';
+import 'evil_words_challenge.dart';
 
 class SelectionScreen extends StatefulWidget {
   static String id = "Selection Screen";

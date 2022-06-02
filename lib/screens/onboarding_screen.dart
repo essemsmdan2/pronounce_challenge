@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:pronounce_challenge/screens/selection_screen/selection_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:pronounce_challenge/widget/button_widget.dart';
 
@@ -40,8 +40,7 @@ class OnBoardingPage extends StatelessWidget {
               decoration: getPageDecoration(),
             ),
           ],
-          done: const Text('Read',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          done: const Text('Read', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           onDone: () => goToHome(context),
           showSkipButton: true,
           skip: const Text(
@@ -78,8 +77,7 @@ class OnBoardingPage extends StatelessWidget {
     );
   }
 
-  Widget buildImage(String path) =>
-      Center(child: Image.asset(path, width: 350));
+  Widget buildImage(String path) => Center(child: Image.asset(path, width: 350));
 
   DotsDecorator getDotDecoration() => DotsDecorator(
         color: const Color(0xFFBDBDBD),

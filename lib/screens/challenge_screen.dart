@@ -4,9 +4,9 @@ import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:provider/provider.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
-import '../../widget/admob_manager.dart';
-import '../results_screen/results_screen.dart';
-import '../selection_screen/selection_screen.dart';
+import '../widget/admob_manager.dart';
+import 'results_screen.dart';
+import 'selection_screen.dart';
 import 'floating_microphone.dart';
 
 class ChallengeScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
       Provider.of<ChallengeData>(context, listen: false).nextRandomText();
 
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
-      Provider.of<ChallengeData>(context, listen: false).admob.addAds(false, true, true);
+      Provider.of<ChallengeData>(context, listen: false).admob.addAds(true, true, true);
       Provider.of<ChallengeData>(context, listen: false).resetChallengeNumber();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
@@ -176,13 +176,6 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-/*                        Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  "${chData.printResult(chData.nysiisModified, chData.randomText)}",
-                                  style: kBiglittleTextStyle,
-                                ),
-                              )*/
                               const SizedBox(height: 5),
                               Row(
                                 children: [
@@ -215,7 +208,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                     width: 10,
                                   ),
                                   ElevatedButton(
-                                    onPressed: () => chData.showAdstuff(context),
+                                    onPressed: chData.isListening == false ? () => chData.showAdstuff(context) : null,
                                     child: const Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Icon(

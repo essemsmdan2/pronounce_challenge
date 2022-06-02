@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/widget/admob_manager.dart';
 
-import '../../constants.dart';
-import '../challenge_screen/challenge_screen.dart';
+import '../constants.dart';
+import 'challenge_screen.dart';
 
 class ChooseQnt extends StatelessWidget {
   static String id = "Choose Qnt";

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:number_to_words/number_to_words.dart';
 import 'package:pronounce_challenge/constants.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/screens/challenge_screen/challenge_screen.dart';
+import 'package:pronounce_challenge/screens/challenge_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 

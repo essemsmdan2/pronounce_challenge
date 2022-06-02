@@ -4,12 +4,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:pronounce_challenge/screens/results_screen/results_screen.dart';
+import 'package:pronounce_challenge/screens/results_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:pronounce_challenge/widget/admob_manager.dart';
 import '../constants.dart';
-import '../screens/challenge_screen/challenge_screen.dart';
-import '../screens/selection_screen/selection_screen.dart';
+import '../screens/challenge_screen.dart';
+import '../screens/selection_screen.dart';
 
 class ChallengeData extends ChangeNotifier {
   AudioCache audioCache = AudioCache();
@@ -123,14 +123,20 @@ class ChallengeData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addEvilWord(String randomText, BuildContext context) async {
+  void showSnackBar(context, text, bool removeorAdd) {
+    String RemoveText = "Removed from 'Evil Words' Menu";
+    String AddText = "Added to 'Evil Words' in the Menu";
     String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        "'${capitalize(_randomText)}' added to 'Evil Words' in the Menu",
+        "'${capitalize(text)}' ${removeorAdd == true ? AddText : RemoveText}",
         style: TextStyle(fontSize: 18),
       ),
     ));
+  }
+
+  void addEvilWord(String randomText, BuildContext context) async {
+    showSnackBar(context, randomText, true);
     print('$randomText added to evil words');
     setShowEvilWordMenu(true);
     evilWordsCount++;
@@ -193,12 +199,17 @@ class ChallengeData extends ChangeNotifier {
 
   void showAdstuff(context) {
     if (challengeNumber == challengeQnt) {
-      try {
-        admob.showRewardedAd();
-      } catch (e) {
-        print("this is the error i'm looking for $e");
-      }
       Timer(Duration(seconds: 1), () {
+        try {
+          admob.showRewardedAd();
+        } catch (e) {
+          print(e);
+          try {
+            admob.showInterstitial();
+          } catch (e) {
+            print(e);
+          }
+        }
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
