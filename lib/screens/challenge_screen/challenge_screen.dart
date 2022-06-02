@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/constants.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import '../../widget/admob_manager.dart';
-import 'buttons_in_row.dart';
+import '../results_screen/results_screen.dart';
+import '../selection_screen/selection_screen.dart';
 import 'floating_microphone.dart';
 
 class ChallengeScreen extends StatefulWidget {
@@ -20,16 +20,16 @@ class ChallengeScreen extends StatefulWidget {
 }
 
 class _ChallengeScreenState extends State<ChallengeScreen> {
-  AdManager adManager = AdManager();
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    adManager.addAds(false, true, true);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).nextRandomText();
+
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
+      Provider.of<ChallengeData>(context, listen: false).admob.addAds(false, true, true);
       Provider.of<ChallengeData>(context, listen: false).resetChallengeNumber();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
@@ -40,18 +40,14 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   Widget build(BuildContext context) {
     return Consumer<ChallengeData>(
       builder: (BuildContext context, chData, Widget? child) {
+        chData.challengeQnt = widget.challengeQnt;
+
         return Scaffold(
             appBar: AppBar(
               toolbarHeight: 100,
               centerTitle: true,
               title: Column(
                 children: [
-                  /* Text(
-                    'CHALLENGE',
-                    textAlign: TextAlign.center,
-                    style: kAppBarTextStyle.copyWith(fontSize: 25),
-                  ),*/
-
                   Text(
                     '${widget.challengeQnt}/${chData.challengeNumber} ',
                     textAlign: TextAlign.center,
@@ -188,11 +184,48 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                 ),
                               )*/
                               const SizedBox(height: 5),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5.2),
-                                child: ButtonsInRow(
-                                  challengeQnt: widget.challengeQnt,
-                                ),
+                              Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speak() : null,
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.play_arrow,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakSlow() : null,
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.volume_up_outlined,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () => chData.showAdstuff(context),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.navigate_next,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               )
                             ],
                           ),
@@ -219,7 +252,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                     ],
                   ),
                 ),
-                /* adManager.showBannerWidget()*/
+                chData.admob.showBannerWidget()
               ],
             ));
       },

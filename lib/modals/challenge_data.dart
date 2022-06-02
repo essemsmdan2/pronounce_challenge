@@ -1,10 +1,15 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:pronounce_challenge/screens/results_screen/results_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
+import 'package:pronounce_challenge/widget/admob_manager.dart';
 import '../constants.dart';
+import '../screens/challenge_screen/challenge_screen.dart';
+import '../screens/selection_screen/selection_screen.dart';
 
 class ChallengeData extends ChangeNotifier {
   AudioCache audioCache = AudioCache();
@@ -14,6 +19,8 @@ class ChallengeData extends ChangeNotifier {
 
   FlutterTts flutterTts = FlutterTts();
   bool _showEvilWordsMenu = false;
+
+  var challengeQnt;
 
   get showEvilWordsMenu => _showEvilWordsMenu;
   void setShowEvilWordMenu(bool state) {
@@ -38,6 +45,8 @@ class ChallengeData extends ChangeNotifier {
     await flutterTts.setSpeechRate(0.5);
     await flutterTts.speak(randomText);
   }
+
+  AdManager admob = AdManager();
 
   void speakEvil() async {
     //  print(await flutterTts.getLanguages);
@@ -175,11 +184,43 @@ class ChallengeData extends ChangeNotifier {
     _resultColor = newColor;
   }
 
-  void checkAnswer() {
+  bool _showRewardAd = false;
+  get showRewardAd => _showRewardAd;
+  void setShowRewardAd(bool state) {
+    _showRewardAd = state;
+    notifyListeners();
+  }
+
+  void showAdstuff(context) {
+    if (challengeNumber == challengeQnt) {
+      try {
+        admob.showRewardedAd();
+      } catch (e) {
+        print("this is the error i'm looking for $e");
+      }
+      Timer(Duration(seconds: 1), () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ResultsScreen(
+                    contextscreen: ChallengeScreen(
+                      challengeQnt: challengeQnt,
+                    ),
+                  )),
+          ModalRoute.withName("" + SelectionScreen.id),
+        );
+      });
+    } else {
+      nextRandomText();
+    }
+  }
+
+  void checkAnswer(context) {
     if (_randomText == _textInput) {
       print('playing again');
       audioCache.play('right.wav');
       setresultColor(Colors.green);
+      if (challengeQnt == _challengeNumber) showAdstuff(context);
       notifyListeners();
     } else if (_textInput == "...Try Again" || _textInput == "Listening..." || _textInput == "Press the Microphone Button") {
       setresultColor(kPrimaryColor);

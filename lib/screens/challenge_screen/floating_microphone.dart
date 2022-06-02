@@ -10,12 +10,10 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 class FloatingMicrophoneInput extends StatefulWidget {
   var screenContext;
 
-  FloatingMicrophoneInput({Key? key, required this.screenContext})
-      : super(key: key);
+  FloatingMicrophoneInput({Key? key, required this.screenContext}) : super(key: key);
 
   @override
-  State<FloatingMicrophoneInput> createState() =>
-      _FloatingMicrophoneInputState();
+  State<FloatingMicrophoneInput> createState() => _FloatingMicrophoneInputState();
 }
 
 class _FloatingMicrophoneInputState extends State<FloatingMicrophoneInput> {
@@ -46,9 +44,7 @@ class _FloatingMicrophoneInputState extends State<FloatingMicrophoneInput> {
 
         void _listen() async {
           chData.setresultColor(kPrimaryColor);
-          widget.screenContext == ChallengeScreen.id
-              ? chData.addTrys(true, context)
-              : chData.addTrys(false, context);
+          widget.screenContext == ChallengeScreen.id ? chData.addTrys(true, context) : chData.addTrys(false, context);
           var other = RegExp('^[1-9]');
           if (!chData.isListening) {
             bool available = await _speech!.initialize(
@@ -82,21 +78,15 @@ class _FloatingMicrophoneInputState extends State<FloatingMicrophoneInput> {
                     print(val);
                     if (val.hasConfidenceRating && val.confidence > 0) {
                       if (val.recognizedWords.contains(other)) {
-                        String trimadaStringada = NumberToWord()
-                            .convert('en-in', int.parse(val.recognizedWords));
+                        String trimadaStringada = NumberToWord().convert('en-in', int.parse(val.recognizedWords));
                         chData.changeTextInput(trimadaStringada.trim());
                       } else {
-                        chData
-                            .changeTextInput(val.recognizedWords.toLowerCase());
+                        chData.changeTextInput(val.recognizedWords.toLowerCase());
                       }
 
-                      widget.screenContext == ChallengeScreen.id
-                          ? chData.checkAnswer()
-                          : chData.checkAnswerEvilWords();
+                      widget.screenContext == ChallengeScreen.id ? chData.checkAnswer(context) : chData.checkAnswerEvilWords();
                       chData.changeListening(false);
-                      widget.screenContext == ChallengeScreen.id
-                          ? chData.checkResult()
-                          : chData.checkResultEvil();
+                      widget.screenContext == ChallengeScreen.id ? chData.checkResult() : chData.checkResultEvil();
                     }
                   });
             } else {
@@ -118,16 +108,11 @@ class _FloatingMicrophoneInputState extends State<FloatingMicrophoneInput> {
             repeatPauseDuration: const Duration(milliseconds: 100),
             repeat: true,
             child: FloatingActionButton(
-                onPressed:
-                    chData.resultColor == Colors.green || chData.isListening
-                        ? null
-                        : _listen,
+                onPressed: chData.resultColor == Colors.green || chData.isListening ? null : _listen,
                 child: Icon(
                   Icons.mic,
                   size: 40,
-                  color: chData.resultColor == Colors.green
-                      ? kPrimaryColor.shade300
-                      : Colors.white,
+                  color: chData.resultColor == Colors.green ? kPrimaryColor.shade300 : Colors.white,
                 )),
           ),
         );
