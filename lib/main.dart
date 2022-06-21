@@ -26,6 +26,12 @@ void main() async {
   );
 
   FireBaseNotificationsApi.requestandoPermissiones();
+  FirebaseMessaging.onBackgroundMessage(FireBaseNotificationsApi.firebaseMessagingBackgroundHandler);
+
+  //linhas abaixo usadas para identificar o token do celular de teste pra uso no console do firebase
+  /* print(await FireBaseNotificationsApi.fcmToken);
+  print('esse de cima ai');*/
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
