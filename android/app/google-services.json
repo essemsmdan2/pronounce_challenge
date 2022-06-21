@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1095655513195",
+    "project_id": "pronounciation-challenge",
+    "storage_bucket": "pronounciation-challenge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095655513195:android:16f232cd80e98a0da2e52e",
+        "android_client_info": {
+          "package_name": "com.frictionsa.pronounceChallenge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1095655513195-kq887mbfmekh7527l3hfr23uo423i6e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkITT1NDUoA3giwM9Us7RNC3ya0Fjlq78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1095655513195-kq887mbfmekh7527l3hfr23uo423i6e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

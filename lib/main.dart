@@ -1,7 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
+import 'package:pronounce_challenge/modals/firebase_notifications.dart';
 import 'package:pronounce_challenge/screens/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/detail_screen.dart';
 
@@ -13,10 +15,17 @@ import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FireBaseNotificationsApi.requestandoPermissiones();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
