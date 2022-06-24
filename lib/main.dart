@@ -26,11 +26,12 @@ void main() async {
   );
 
   FireBaseNotificationsApi.requestandoPermissiones();
-  FirebaseMessaging.onBackgroundMessage(FireBaseNotificationsApi.firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(
+      FireBaseNotificationsApi.firebaseMessagingBackgroundHandler);
 
   //linhas abaixo usadas para identificar o token do celular de teste pra uso no console do firebase
-  /* print(await FireBaseNotificationsApi.fcmToken);
-  print('esse de cima ai');*/
+  print(await FireBaseNotificationsApi.fcmToken);
+  print('esse de cima ai');
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -48,6 +49,7 @@ class PronounceChallenge extends StatefulWidget {
 
 class _PronounceChallengeState extends State<PronounceChallenge> {
   bool? _firstTime;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -65,7 +67,8 @@ class _PronounceChallengeState extends State<PronounceChallenge> {
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: kPrimaryColor,
             )),
-        initialRoute: _firstTime ?? true ? OnBoardingPage.id : SelectionScreen.id,
+        initialRoute:
+            _firstTime ?? true ? OnBoardingPage.id : SelectionScreen.id,
         routes: {
           DetailScreen.id: (context) => const DetailScreen(),
           ChallengeScreen.id: (context) => ChallengeScreen(
