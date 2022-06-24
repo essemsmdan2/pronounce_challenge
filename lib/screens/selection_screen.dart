@@ -31,21 +31,13 @@ class _SelectionScreenState extends State<SelectionScreen> {
     super.initState();
     //  admob.addAds(false, true, false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ChallengeData>(context, listen: false)
-          .updateEvilWordsFromSharedPreferences();
+      Provider.of<ChallengeData>(context, listen: false).updateEvilWordsFromSharedPreferences();
 
-      if (Provider
-          .of<ChallengeData>(context, listen: false)
-          .evilWordArray
-          .isNotEmpty) {
-        print(Provider
-            .of<ChallengeData>(context, listen: false)
-            .evilWordArray);
-        Provider.of<ChallengeData>(context, listen: false).setShowEvilWordMenu(
-            true);
+      if (Provider.of<ChallengeData>(context, listen: false).evilWordArray.isNotEmpty) {
+        print(Provider.of<ChallengeData>(context, listen: false).evilWordArray);
+        Provider.of<ChallengeData>(context, listen: false).setShowEvilWordMenu(true);
       } else {
-        Provider.of<ChallengeData>(context, listen: false).setShowEvilWordMenu(
-            false);
+        Provider.of<ChallengeData>(context, listen: false).setShowEvilWordMenu(false);
       }
     });
   }
@@ -62,61 +54,57 @@ class _SelectionScreenState extends State<SelectionScreen> {
         ),
       ),
       body: Consumer<ChallengeData>(
-        builder: (BuildContext context, chData, Widget? child) =>
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-
-
-                        ElevatedButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, ChooseQnt.id),
-                          child: Text(
-                            'CHALLENGES',
-                            style: kAppBarTextStyle,
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: null,
-                          child: Text(
-                            'MULTI LANG(SOON) ',
-                            style: kAppBarTextStyle,
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: chData.showEvilWordsMenu
-                              ? () {
-                            Navigator.pushNamed(context, EvilWordsScreen.id);
-                          }
-                              : null,
-                          child: Text(
-                            'EVIL WORDS',
-                            style: kAppBarTextStyle,
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, OnBoardingPage.id);
-                          },
-                          child: Text(
-                            'INTRO ',
-                            style: kAppBarTextStyle,
-                          ),
-                        ),
-                      ],
+        builder: (BuildContext context, chData, Widget? child) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, ChooseQnt.id),
+                      child: Text(
+                        'CHALLENGES',
+                        style: kAppBarTextStyle,
+                      ),
                     ),
-                  ),
+                    ElevatedButton(
+                      onPressed: null,
+                      child: Text(
+                        'MULTI LANG(SOON) ',
+                        style: kAppBarTextStyle,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: chData.showEvilWordsMenu
+                          ? () {
+                              Navigator.pushNamed(context, EvilWordsScreen.id);
+                            }
+                          : null,
+                      child: Text(
+                        'EVIL WORDS',
+                        style: kAppBarTextStyle,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, OnBoardingPage.id);
+                      },
+                      child: Text(
+                        'INTRO ',
+                        style: kAppBarTextStyle,
+                      ),
+                    ),
+                  ],
                 ),
-                // admob.showBannerWidget()
-              ],
+              ),
             ),
+            // admob.showBannerWidget()
+          ],
+        ),
       ),
     );
   }
