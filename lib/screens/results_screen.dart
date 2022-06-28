@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/detail_screen.dart';
-import 'package:pronounce_challenge/screens/selection_screen.dart';
+import 'package:pronounce_challenge/screens/in_app_purchase_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -56,8 +56,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
               ),
             ),
             body: Padding(
-              padding: const EdgeInsets.only(
-                  top: 30.0, left: 15, right: 15, bottom: 0),
+              padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -74,10 +73,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                           },
                           child: Text(
                             "Details",
-                            style: kAppBarTextStyle.copyWith(
-                                fontSize: 20,
-                                letterSpacing: 2,
-                                color: kSecondaryColorStyle),
+                            style: kAppBarTextStyle.copyWith(fontSize: 20, letterSpacing: 2, color: kSecondaryColorStyle),
                           ),
                         ),
                       ],
@@ -89,8 +85,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       children: [
                         ElevatedButton(
                             style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.all(5)),
+                              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(5)),
                             ),
                             onPressed: () {
                               chData.resetWorldConts();
@@ -113,8 +108,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => SelectionScreen()),
+                                MaterialPageRoute(builder: (context) => SelectionScreen()),
                                 ModalRoute.withName(""),
                               );
                             },
@@ -124,8 +118,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             )),
                         ElevatedButton(
                             onPressed: () async {
-                              final image =
-                                  await screenshotController.capture();
+                              final image = await screenshotController.capture();
 
                               if (image == null) return;
                               saveAndShare(image);

@@ -31,6 +31,13 @@ class ChooseQnt extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ElevatedButton(
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChallengeScreen(challengeQnt: 5))),
+                    child: Text(
+                      'WORDS "05"',
+                      style: kAppBarTextStyle,
+                    ),
+                  ),
+                  ElevatedButton(
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChallengeScreen(challengeQnt: 10))),
                     child: Text(
                       'WORDS "10"',

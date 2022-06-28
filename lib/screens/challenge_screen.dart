@@ -6,7 +6,7 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import '../widget/admob_manager.dart';
 import 'results_screen.dart';
-import 'selection_screen.dart';
+import 'in_app_purchase_screen.dart';
 import 'floating_microphone.dart';
 
 class ChallengeScreen extends StatefulWidget {

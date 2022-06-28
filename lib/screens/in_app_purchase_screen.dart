@@ -11,6 +11,7 @@ import 'package:pronounce_challenge/widget/admob_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import 'consumable/second_screen.dart';
 import 'evil_words_challenge.dart';
 
 class SelectionScreen extends StatefulWidget {
@@ -48,6 +49,21 @@ class _SelectionScreenState extends State<SelectionScreen> {
       appBar: AppBar(
         toolbarHeight: 100,
         centerTitle: true,
+        actions: [
+          TextButton(
+            child: Icon(
+              Icons.add,
+              size: 30,
+              color: Colors.white,
+            ),
+            onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyPurchaseScreen()),
+              )
+            },
+          )
+        ],
         title: Text(
           'CHALLENGES',
           style: kAppBarTextStyle.copyWith(fontSize: 25),

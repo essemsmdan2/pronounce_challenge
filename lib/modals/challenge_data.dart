@@ -9,7 +9,7 @@ import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:pronounce_challenge/widget/admob_manager.dart';
 import '../constants.dart';
 import '../screens/challenge_screen.dart';
-import '../screens/selection_screen.dart';
+import '../screens/in_app_purchase_screen.dart';
 
 class ChallengeData extends ChangeNotifier {
   AudioCache audioCache = AudioCache();
