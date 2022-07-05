@@ -11,7 +11,7 @@ import 'package:pronounce_challenge/widget/admob_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import 'consumable/second_screen.dart';
+import 'consumable/in_app_purchases.dart';
 import 'evil_words_challenge.dart';
 
 class SelectionScreen extends StatefulWidget {
@@ -88,6 +88,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       ),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(onSurface: Colors.black),
                       onPressed: null,
                       child: Text(
                         'MULTI LANG(SOON) ',
@@ -95,6 +96,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       ),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(onSurface: Colors.black),
                       onPressed: chData.showEvilWordsMenu
                           ? () {
                               Navigator.pushNamed(context, EvilWordsScreen.id);

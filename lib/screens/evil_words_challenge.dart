@@ -4,7 +4,7 @@ import 'package:pronounce_challenge/constants.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/floating_microphone.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
-import 'package:pronounce_challenge/screens/in_app_purchase_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:wave/config.dart';
@@ -33,7 +33,7 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).setevilWordIndexText(_indexCount);
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
-      Provider.of<ChallengeData>(context, listen: false).admob.addAds(true, true, true);
+      Provider.of<ChallengeData>(context, listen: false).admob!.addAds(true, true, true);
       print(Provider.of<ChallengeData>(context, listen: false).evilWordArray);
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
@@ -209,11 +209,11 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                                 chData.setresultColor(kPrimaryColor);
                                 if (_indexCount + 1 >= chData.evilWordArray.length) {
                                   try {
-                                    chData.admob.showRewardedAd();
+                                    chData.admob!.showRewardedAd();
                                   } on Exception catch (e) {
                                     print(e);
                                     try {
-                                      chData.admob.showInterstitial();
+                                      chData.admob!.showInterstitial();
                                     } catch (e) {
                                       print(e);
                                     }
@@ -297,7 +297,7 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                     waveAmplitude: 0,
                     heightPercentange: 0.2,
                     size: const Size(double.infinity, 50)),
-                chData.admob.showBannerWidget()
+                chData.admob!.showBannerWidget()
               ],
             ));
       },

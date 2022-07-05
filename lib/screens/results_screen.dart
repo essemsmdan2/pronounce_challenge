@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/detail_screen.dart';
-import 'package:pronounce_challenge/screens/in_app_purchase_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';

@@ -10,15 +10,18 @@ import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:provider/provider.dart';
+import '../../modals/challenge_data.dart';
 import 'consumable_store.dart';
 
 const bool _kAutoConsume = true;
-
-const String _kConsumableId = 'adsremoval';
+const String _kConsumableId = 'consumable';
+const String _kNomConsumableId = 'adsremoval';
 const String _kUpgradeId = 'upgrade';
 const String _kSilverSubscriptionId = 'subscription_silver';
 const String _kGoldSubscriptionId = 'subscription_gold';
 const List<String> _kProductIds = <String>[
+  _kNomConsumableId,
   _kConsumableId,
   _kUpgradeId,
   _kSilverSubscriptionId,
@@ -31,13 +34,25 @@ class MyPurchaseScreen extends StatefulWidget {
 }
 
 class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
+  /// IAP Plugin interface
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
-  List<String> _notFoundIds = <String>[];
-  List<ProductDetails> _products = <ProductDetails>[];
-  List<PurchaseDetails> _purchases = <PurchaseDetails>[];
-  List<String> _consumables = <String>[];
+
+  /// is the API available on the device
   bool _isAvailable = false;
+
+  ///  Products for sale (products details to be queery from google api)
+  List<ProductDetails> _products = <ProductDetails>[];
+
+  /// Past purchases
+  List<PurchaseDetails> _purchases = <PurchaseDetails>[];
+
+  /// Updates to purchases
+  late StreamSubscription<List<PurchaseDetails>> _subscription;
+
+  List<String> _notFoundIds = <String>[];
+
+  List<String> _consumables = <String>[];
+
   bool _purchasePending = false;
   bool _loading = true;
   String? _queryProductError;
@@ -65,6 +80,7 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
         _purchases = <PurchaseDetails>[];
         _notFoundIds = <String>[];
         _consumables = <String>[];
+
         _purchasePending = false;
         _loading = false;
       });
@@ -108,6 +124,7 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
       _consumables = consumables;
       _purchasePending = false;
       _loading = false;
+      _inAppPurchase.restorePurchases();
     });
   }
 
@@ -127,7 +144,7 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
             _buildConnectionCheckTile(),
             _buildProductList(),
             _buildConsumableBox(),
-            //_buildRestoreButton(),
+            _buildRestoreButton(),
           ],
         ),
       );
@@ -211,6 +228,9 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     productList.addAll(_products.map(
       (ProductDetails productDetails) {
         final PurchaseDetails? previousPurchase = purchases[productDetails.id];
+        if (purchases[productDetails.id] == _kNomConsumableId) {
+          Provider.of<ChallengeData>(context, listen: false).setRemovalPurchased(true);
+        }
         return ListTile(
             title: Text(
               productDetails.title,
@@ -265,6 +285,7 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     return Card(child: Column(children: <Widget>[productHeader, const Divider()] + productList));
   }
 
+  // Mostra os Produtos Consumiveis adquiridos
   Card _buildConsumableBox() {
     if (_loading) {
       return const Card(child: ListTile(leading: CircularProgressIndicator(), title: Text('Fetching consumables...')));
@@ -297,6 +318,7 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     ]));
   }
 
+  // Restaura os Produtos Consumiveis adquiridos
   Widget _buildRestoreButton() {
     if (_loading) {
       return Container();
@@ -321,9 +343,11 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     );
   }
 
+  // Consome os Consumiveis adquiridos
   Future<void> consume(String id) async {
     await ConsumableStore.consume(id);
     final List<String> consumables = await ConsumableStore.load();
+    Provider.of<ChallengeData>(context, listen: false).setRemovalPurchased(false);
     setState(() {
       _consumables = consumables;
     });
@@ -335,11 +359,13 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     });
   }
 
+  /// Verify the product is valid
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     // IMPORTANT!! Always verify purchase details before delivering the product.
     if (purchaseDetails.productID == _kConsumableId) {
       await ConsumableStore.save(purchaseDetails.purchaseID!);
       final List<String> consumables = await ConsumableStore.load();
+
       setState(() {
         _purchasePending = false;
         _consumables = consumables;
@@ -368,6 +394,8 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     // handle invalid purchase here if  _verifyPurchase` failed.
   }
 
+  /// handle purchases updates throught its status: pending, error, purchased and if
+  /// it has the purchased status it leads to veryPurchased, since if you have a purchased not necessarly mean its valid
   Future<void> _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) async {
     for (final PurchaseDetails purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
@@ -376,8 +404,10 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
         if (purchaseDetails.status == PurchaseStatus.error) {
           handleError(purchaseDetails.error!);
         } else if (purchaseDetails.status == PurchaseStatus.purchased || purchaseDetails.status == PurchaseStatus.restored) {
+          /// Verify the product is valid
           final bool valid = await _verifyPurchase(purchaseDetails);
           if (valid) {
+            /// Runs the deliver of the products after its been validated
             deliverProduct(purchaseDetails);
           } else {
             _handleInvalidPurchase(purchaseDetails);

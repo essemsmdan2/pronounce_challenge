@@ -9,13 +9,24 @@ import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:pronounce_challenge/widget/admob_manager.dart';
 import '../constants.dart';
 import '../screens/challenge_screen.dart';
-import '../screens/in_app_purchase_screen.dart';
+import '../screens/selection_screen.dart';
 
 class ChallengeData extends ChangeNotifier {
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
   String? localFilePath;
   String? localAudioCacheURI;
+
+  //if its true ads will not be showed to the user
+  static bool _adsRemovalPurchased = false;
+  get adsRemovalPurchased => _adsRemovalPurchased;
+
+  //usally this will be set only once to true, unless the user asks for refund
+  void setRemovalPurchased(bool state) {
+    _adsRemovalPurchased = state;
+    print('Ads Removal State= $state');
+    notifyListeners();
+  }
 
   FlutterTts flutterTts = FlutterTts();
   bool _showEvilWordsMenu = false;
@@ -46,7 +57,7 @@ class ChallengeData extends ChangeNotifier {
     await flutterTts.speak(randomText);
   }
 
-  AdManager admob = AdManager();
+  var admob = _adsRemovalPurchased ? null : AdManager();
 
   void speakEvil() async {
     //  print(await flutterTts.getLanguages);
@@ -201,11 +212,11 @@ class ChallengeData extends ChangeNotifier {
     if (challengeNumber == challengeQnt) {
       Timer(Duration(seconds: 1), () {
         try {
-          admob.showRewardedAd();
+          admob!.showRewardedAd();
         } catch (e) {
           print(e);
           try {
-            admob.showInterstitial();
+            admob!.showInterstitial();
           } catch (e) {
             print(e);
           }

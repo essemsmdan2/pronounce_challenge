@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';

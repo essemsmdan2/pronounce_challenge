@@ -6,7 +6,7 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import '../widget/admob_manager.dart';
 import 'results_screen.dart';
-import 'in_app_purchase_screen.dart';
+import 'selection_screen.dart';
 import 'floating_microphone.dart';
 
 class ChallengeScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
       Provider.of<ChallengeData>(context, listen: false).nextRandomText();
 
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
-      Provider.of<ChallengeData>(context, listen: false).admob.addAds(true, true, true);
+      Provider.of<ChallengeData>(context, listen: false).admob!.addAds(true, true, true);
       Provider.of<ChallengeData>(context, listen: false).resetChallengeNumber();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
@@ -245,7 +245,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                     ],
                   ),
                 ),
-                chData.admob.showBannerWidget()
+                chData.admob!.showBannerWidget()
               ],
             ));
       },

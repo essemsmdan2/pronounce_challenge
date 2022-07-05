@@ -10,7 +10,7 @@ import 'package:pronounce_challenge/screens/evil_words_challenge.dart';
 import 'package:pronounce_challenge/screens/onboarding_screen.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
 import 'package:pronounce_challenge/screens/choose_qnt_screen.dart';
-import 'package:pronounce_challenge/screens/in_app_purchase_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:pronounce_challenge/user_preferences.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';

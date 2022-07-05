@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pronounce_challenge/screens/in_app_purchase_screen.dart';
+import 'package:pronounce_challenge/screens/selection_screen.dart';
 
 import '../constants.dart';
 
