@@ -4,8 +4,15 @@ class UserPreferences {
   static late SharedPreferences _preferences;
   static const String _keyEvilWords = "evilWords";
   static const String _firstTimeBool = "firstTime";
+  static const String _removeAdsBool = "removeAds";
 
   static Future init() async => _preferences = await SharedPreferences.getInstance();
+
+  // RESPONSÁVEL PELA SETAGEM DE REMOÇÃO DE ADS
+  static Future setRemovalAds() async => await _preferences.setBool(_removeAdsBool, true);
+  static bool? getRemovalAdsBool() {
+    return _preferences.getBool(_removeAdsBool);
+  }
 
   //RESPONSAVEL PELA SETAGEM INICIAL
   static Future setFirstTime() async => await _preferences.setBool(_firstTimeBool, false);

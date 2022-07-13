@@ -1,6 +1,12 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:pronounce_challenge/modals/user_preferences.dart';
+
+import 'package:provider/provider.dart';
+
+import '../modals/challenge_data.dart';
 
 class AdManager {
   BannerAd? _bannerAd;
@@ -9,9 +15,7 @@ class AdManager {
 
   void loadBannerAd() {
     _bannerAd = BannerAd(
-      adUnitId: Platform.isIOS
-          ? "ca-app-pub-1426529590077720/6186803041"
-          : "ca-app-pub-1426529590077720/4475842533",
+      adUnitId: Platform.isIOS ? "ca-app-pub-1426529590077720/6186803041" : "ca-app-pub-1426529590077720/4475842533",
       size: AdSize.banner,
       request: const AdRequest(),
       listener: const BannerAdListener(),
@@ -22,12 +26,9 @@ class AdManager {
 
   void loadRewardedAd() {
     RewardedAd.load(
-        adUnitId: Platform.isIOS
-            ? "ca-app-pub-1426529590077720/8213597940"
-            : "ca-app-pub-1426529590077720/2622870669",
+        adUnitId: Platform.isIOS ? "ca-app-pub-1426529590077720/8213597940" : "ca-app-pub-1426529590077720/2622870669",
         request: const AdRequest(),
-        rewardedAdLoadCallback:
-            RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
+        rewardedAdLoadCallback: RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
         }, onAdFailedToLoad: (LoadAdError error) {
           print(error);
@@ -37,9 +38,7 @@ class AdManager {
   }
 
   void loadInterstitialAd() {
-    String interstitialAdId = Platform.isIOS
-        ? "ca-app-pub-1426529590077720/1849679191"
-        : "ca-app-pub-1426529590077720/9536597529";
+    String interstitialAdId = Platform.isIOS ? "ca-app-pub-1426529590077720/1849679191" : "ca-app-pub-1426529590077720/9536597529";
 
     InterstitialAd.load(
         adUnitId: interstitialAdId,
@@ -54,8 +53,7 @@ class AdManager {
                 ad.dispose();
                 loadInterstitialAd();
               },
-              onAdFailedToShowFullScreenContent:
-                  (InterstitialAd ad, AdError error) {
+              onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
                 ad.dispose();
                 loadInterstitialAd();
               },
@@ -90,23 +88,24 @@ class AdManager {
   }
 
   void showRewardedAd() {
-    if (_rewardedAd != null) {
-      _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-          onAdShowedFullScreenContent: (RewardedAd ad) {
-        print("Ad onAdShowedFullScreenContent");
-      }, onAdDismissedFullScreenContent: (RewardedAd ad) {
-        ad.dispose();
-        loadRewardedAd();
-      }, onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        ad.dispose();
-        loadRewardedAd();
-      });
+    bool? _result = UserPreferences.getRemovalAdsBool();
+    if (_result == null) {
+      if (_rewardedAd != null) {
+        _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(onAdShowedFullScreenContent: (RewardedAd ad) {
+          print("Ad onAdShowedFullScreenContent");
+        }, onAdDismissedFullScreenContent: (RewardedAd ad) {
+          ad.dispose();
+          loadRewardedAd();
+        }, onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+          ad.dispose();
+          loadRewardedAd();
+        });
 
-      _rewardedAd!.setImmersiveMode(true);
-      _rewardedAd!.show(
-          onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-        print("${reward.amount} ${reward.type}");
-      });
+        _rewardedAd!.setImmersiveMode(true);
+        _rewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+          print("${reward.amount} ${reward.type}");
+        });
+      }
     }
   }
 
@@ -116,11 +115,19 @@ class AdManager {
     _rewardedAd?.dispose();
   }
 
-  SizedBox showBannerWidget() {
-    return SizedBox(
-      width: double.infinity,
-      height: 55,
-      child: AdWidget(ad: getBannerAd()!),
-    );
+  Widget showBannerWidget(context) {
+    bool? _result = UserPreferences.getRemovalAdsBool();
+
+    return _result == null
+        ? SizedBox(
+            width: double.infinity,
+            height: 55,
+            child: AdWidget(ad: getBannerAd()!),
+          )
+        : Container(
+            width: 200,
+            height: 50,
+            color: Colors.green,
+          );
   }
 }

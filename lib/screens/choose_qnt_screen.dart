@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:pronounce_challenge/widget/admob_manager.dart';
-
-import '../constants.dart';
+import 'package:pronounce_challenge/api/admob_manager.dart';
+import '../modals/constants.dart';
 import 'challenge_screen.dart';
 
 class ChooseQnt extends StatelessWidget {
+  AdManager admob = AdManager();
   static String id = "Choose Qnt";
   ChooseQnt({Key? key}) : super(key: key) {
     admob.addAds(false, true, false);
   }
-  AdManager admob = AdManager();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +62,7 @@ class ChooseQnt extends StatelessWidget {
               ),
             ),
           ),
-          admob.showBannerWidget()
+          admob.showBannerWidget(context)
         ],
       ),
     );

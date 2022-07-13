@@ -10,19 +10,21 @@ import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:pronounce_challenge/modals/user_preferences.dart';
 import 'package:provider/provider.dart';
-import '../../modals/challenge_data.dart';
-import 'consumable_store.dart';
+import '../modals/challenge_data.dart';
+import '../modals/consumable/consumable_store.dart';
 
 const bool _kAutoConsume = true;
-const String _kConsumableId = 'consumable';
-const String _kNomConsumableId = 'adsremoval';
+//por algum motivo esse aqui de baixo dá bug quando uso o id consumable
+const String _kConsumableId = 'xxx';
+const String _kNomConsumableId = 'adsremovals';
 const String _kUpgradeId = 'upgrade';
 const String _kSilverSubscriptionId = 'subscription_silver';
 const String _kGoldSubscriptionId = 'subscription_gold';
 const List<String> _kProductIds = <String>[
-  _kNomConsumableId,
   _kConsumableId,
+  _kNomConsumableId,
   _kUpgradeId,
   _kSilverSubscriptionId,
   _kGoldSubscriptionId,
@@ -212,9 +214,9 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     }
     const ListTile productHeader = ListTile(title: Text('Products for Sale'));
     final List<ListTile> productList = <ListTile>[];
-    /* if (_notFoundIds.isNotEmpty) {
+    if (_notFoundIds.isNotEmpty) {
       productList.add(ListTile(title: Text('[${_notFoundIds.join(", ")}] not found', style: TextStyle(color: ThemeData.light().errorColor)), subtitle: const Text('This app needs special configuration to run. Please see example/README.md for instructions.')));
-    }*/
+    }
 
     // This loading previous purchases code is just a demo. Please do not use this as it is.
     // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
@@ -228,9 +230,7 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     productList.addAll(_products.map(
       (ProductDetails productDetails) {
         final PurchaseDetails? previousPurchase = purchases[productDetails.id];
-        if (purchases[productDetails.id] == _kNomConsumableId) {
-          Provider.of<ChallengeData>(context, listen: false).setRemovalPurchased(true);
-        }
+
         return ListTile(
             title: Text(
               productDetails.title,
@@ -359,9 +359,14 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     });
   }
 
-  /// Verify the product is valid
+  /// Verify the product is valid and deliver it
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     // IMPORTANT!! Always verify purchase details before delivering the product.
+    if (purchaseDetails.productID == _kNomConsumableId) {
+      UserPreferences.setRemovalAds();
+      print('setado o removal ads');
+    }
+
     if (purchaseDetails.productID == _kConsumableId) {
       await ConsumableStore.save(purchaseDetails.purchaseID!);
       final List<String> consumables = await ConsumableStore.load();

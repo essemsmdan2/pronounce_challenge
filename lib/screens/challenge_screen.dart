@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pronounce_challenge/constants.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:provider/provider.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
-import '../widget/admob_manager.dart';
-import 'results_screen.dart';
-import 'selection_screen.dart';
-import 'floating_microphone.dart';
+import '../modals/constants.dart';
+import '../widget/floating_microphone.dart';
 
 class ChallengeScreen extends StatefulWidget {
   static String id = "Challenge Screen";
@@ -245,7 +242,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                     ],
                   ),
                 ),
-                chData.admob!.showBannerWidget()
+                chData.admob.showBannerWidget(context)
               ],
             ));
       },

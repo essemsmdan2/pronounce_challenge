@@ -20,7 +20,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Pronounciation Challenge"
+        android:label="Pronunciation Challenge"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"

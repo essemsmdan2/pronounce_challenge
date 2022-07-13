@@ -5,11 +5,11 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
-import 'package:pronounce_challenge/user_preferences.dart';
-import 'package:pronounce_challenge/widget/admob_manager.dart';
-import '../constants.dart';
+import 'package:pronounce_challenge/modals/user_preferences.dart';
+import 'package:pronounce_challenge/api/admob_manager.dart';
 import '../screens/challenge_screen.dart';
 import '../screens/selection_screen.dart';
+import 'constants.dart';
 
 class ChallengeData extends ChangeNotifier {
   AudioCache audioCache = AudioCache();
@@ -18,12 +18,13 @@ class ChallengeData extends ChangeNotifier {
   String? localAudioCacheURI;
 
   //if its true ads will not be showed to the user
-  static bool _adsRemovalPurchased = false;
+  static bool? _adsRemovalPurchased = UserPreferences.getRemovalAdsBool();
   get adsRemovalPurchased => _adsRemovalPurchased;
 
   //usally this will be set only once to true, unless the user asks for refund
   void setRemovalPurchased(bool state) {
     _adsRemovalPurchased = state;
+
     print('Ads Removal State= $state');
     notifyListeners();
   }
@@ -57,7 +58,7 @@ class ChallengeData extends ChangeNotifier {
     await flutterTts.speak(randomText);
   }
 
-  var admob = _adsRemovalPurchased ? null : AdManager();
+  dynamic admob = AdManager();
 
   void speakEvil() async {
     //  print(await flutterTts.getLanguages);
@@ -209,14 +210,15 @@ class ChallengeData extends ChangeNotifier {
   }
 
   void showAdstuff(context) {
+    bool? _result = UserPreferences.getRemovalAdsBool();
     if (challengeNumber == challengeQnt) {
       Timer(Duration(seconds: 1), () {
         try {
-          admob!.showRewardedAd();
+          _result == null ? admob!.showRewardedAd() : null;
         } catch (e) {
           print(e);
           try {
-            admob!.showInterstitial();
+            _result == null ? admob!.showInterstitial() : null;
           } catch (e) {
             print(e);
           }

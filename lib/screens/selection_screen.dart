@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:pronounce_challenge/api/notification_api.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/screens/challenge_screen.dart';
-
 import 'package:pronounce_challenge/screens/onboarding_screen.dart';
 import 'package:pronounce_challenge/screens/choose_qnt_screen.dart';
-import 'package:pronounce_challenge/screens/test.dart';
-import 'package:pronounce_challenge/widget/admob_manager.dart';
+import 'package:pronounce_challenge/api/admob_manager.dart';
 import 'package:provider/provider.dart';
-
-import '../constants.dart';
-import 'consumable/in_app_purchases.dart';
-import 'evil_words_challenge.dart';
+import '../api/in_app_purchases.dart';
+import '../modals/constants.dart';
+import 'evil_words_screen.dart';
 
 class SelectionScreen extends StatefulWidget {
   static String id = "Selection Screen";
@@ -30,7 +24,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //  admob.addAds(false, true, false);
+    admob.addAds(false, true, false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).updateEvilWordsFromSharedPreferences();
 
@@ -120,7 +114,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                 ),
               ),
             ),
-            // admob.showBannerWidget()
+            admob.showBannerWidget(context)
           ],
         ),
       ),

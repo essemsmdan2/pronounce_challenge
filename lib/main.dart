@@ -3,23 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/modals/firebase_notifications.dart';
+import 'package:pronounce_challenge/api/firebase_notifications.dart';
 import 'package:pronounce_challenge/screens/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/detail_screen.dart';
-import 'package:pronounce_challenge/screens/evil_words_challenge.dart';
+import 'package:pronounce_challenge/screens/evil_words_screen.dart';
 import 'package:pronounce_challenge/screens/onboarding_screen.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
 import 'package:pronounce_challenge/screens/choose_qnt_screen.dart';
 import 'package:pronounce_challenge/screens/selection_screen.dart';
-import 'package:pronounce_challenge/user_preferences.dart';
+import 'package:pronounce_challenge/modals/user_preferences.dart';
 import 'package:provider/provider.dart';
-import 'constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'modals/constants.dart';
+
+const List<String> testDeviceIds = ['E60E971E50CC81F9C40D9A05AAE53E0C'];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  RequestConfiguration configuration = RequestConfiguration(testDeviceIds: testDeviceIds);
+  MobileAds.instance.updateRequestConfiguration(configuration);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

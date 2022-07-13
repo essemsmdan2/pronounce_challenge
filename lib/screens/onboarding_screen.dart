@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:pronounce_challenge/screens/selection_screen.dart';
-import 'package:pronounce_challenge/user_preferences.dart';
+import 'package:pronounce_challenge/modals/user_preferences.dart';
 import 'package:pronounce_challenge/widget/button_widget.dart';
 
 class OnBoardingPage extends StatelessWidget {

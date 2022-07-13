@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/screens/selection_screen.dart';
-
-import '../constants.dart';
+import '../modals/constants.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({Key? key}) : super(key: key);

@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/screens/challenge_screen.dart';
 import 'package:pronounce_challenge/screens/detail_screen.dart';
@@ -13,9 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../constants.dart';
-import '../widget/admob_manager.dart';
-import 'screen_shootable_result.dart';
+import '../api/admob_manager.dart';
+import '../modals/constants.dart';
+import '../modals/screen_shootable_result.dart';
 
 class ResultsScreen extends StatefulWidget {
   static String id = "Results Screen";
@@ -31,13 +29,13 @@ class ResultsScreen extends StatefulWidget {
 class _ResultsScreenState extends State<ResultsScreen> {
   ScreenshotController screenshotController = ScreenshotController();
 
-  AdManager adManager = AdManager();
+  AdManager admob = AdManager();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    adManager.addAds(false, true, false);
+    admob.addAds(false, true, false);
   }
 
   @override
@@ -130,7 +128,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       ],
                     ),
                   ),
-                  adManager.showBannerWidget()
+                  admob.showBannerWidget(context)
                 ],
               ),
             ),
