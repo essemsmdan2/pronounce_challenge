@@ -127,7 +127,7 @@ class AdManager {
         : Container(
             width: 200,
             height: 50,
-            color: Colors.green,
+
           );
   }
 }
