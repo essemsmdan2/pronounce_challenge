@@ -48,7 +48,7 @@ class ChallengeData extends ChangeNotifier {
     changeTextInput(pressText);
     int randomIndex = Random().nextInt(all.length - 1);
     changeRandomText(all[randomIndex]);
-    notifyListeners();
+
   }
 
   void speak() async {
@@ -85,16 +85,19 @@ class ChallengeData extends ChangeNotifier {
   get challengeNumber => _challengeNumber;
   void changeChallengeNumber() {
     _challengeNumber++;
+    notifyListeners();
   }
 
   void resetChallengeNumber() {
     _challengeNumber = 0;
+    notifyListeners();
   }
 
   void checkResult() {
     if (_randomText == _textInput) {
       addPoints();
       print(points);
+      notifyListeners();
     }
   }
 
@@ -102,6 +105,7 @@ class ChallengeData extends ChangeNotifier {
     if (_evilwordInIndexText == _textInput) {
       addPoints();
       print(points);
+      notifyListeners();
     }
   }
 
@@ -200,6 +204,7 @@ class ChallengeData extends ChangeNotifier {
   get resultColor => _resultColor;
   void setresultColor(Color newColor) {
     _resultColor = newColor;
+    notifyListeners();
   }
 
   bool _showRewardAd = false;
@@ -244,7 +249,10 @@ class ChallengeData extends ChangeNotifier {
       print('playing again');
       audioCache.play('right.wav');
       setresultColor(Colors.green);
+      changeListening(false);
+
       if (challengeQnt == _challengeNumber) showAdstuff(context);
+      changeListening(false);
       notifyListeners();
     } else if (_textInput == "...Try Again" || _textInput == "Listening..." || _textInput == "Press the Microphone Button") {
       setresultColor(kPrimaryColor);
@@ -252,6 +260,7 @@ class ChallengeData extends ChangeNotifier {
     } else {
       audioCache.play('wrong.wav');
       setresultColor(Colors.redAccent);
+      changeListening(false);
       notifyListeners();
     }
   }
