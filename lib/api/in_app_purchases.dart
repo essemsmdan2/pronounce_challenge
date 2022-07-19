@@ -214,9 +214,9 @@ class _MyPurchaseScreenState extends State<MyPurchaseScreen> {
     }
     const ListTile productHeader = ListTile(title: Text('Products for Sale'));
     final List<ListTile> productList = <ListTile>[];
-    if (_notFoundIds.isNotEmpty) {
+    /*if (_notFoundIds.isNotEmpty) {
       productList.add(ListTile(title: Text('[${_notFoundIds.join(", ")}] not found', style: TextStyle(color: ThemeData.light().errorColor)), subtitle: const Text('This app needs special configuration to run. Please see example/README.md for instructions.')));
-    }
+    }*/
 
     // This loading previous purchases code is just a demo. Please do not use this as it is.
     // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
