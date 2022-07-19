@@ -12,6 +12,7 @@ import 'package:pronounce_challenge/screens/results_screen.dart';
 import 'package:pronounce_challenge/screens/choose_qnt_screen.dart';
 import 'package:pronounce_challenge/screens/selection_screen.dart';
 import 'package:pronounce_challenge/modals/user_preferences.dart';
+import 'package:pronounce_challenge/widget/new_floating_microphone.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -69,7 +70,7 @@ class _PronounceChallengeState extends State<PronounceChallenge> {
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: kPrimaryColor,
             )),
-        initialRoute: _firstTime ?? true ? OnBoardingPage.id : SelectionScreen.id,
+        initialRoute: _firstTime ?? true ? OnBoardingPage.id : newFloatingMic.id,
         routes: {
           DetailScreen.id: (context) => const DetailScreen(),
           ChallengeScreen.id: (context) => ChallengeScreen(
@@ -80,6 +81,7 @@ class _PronounceChallengeState extends State<PronounceChallenge> {
           OnBoardingPage.id: (context) => OnBoardingPage(),
           ChooseQnt.id: (context) => ChooseQnt(),
           EvilWordsScreen.id: (context) => const EvilWordsScreen(),
+          newFloatingMic.id: (context) => newFloatingMic(),
         },
       ),
     );

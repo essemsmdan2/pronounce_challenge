@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-
-
 class newFloatingMic extends StatefulWidget {
+  static String id = "newfloatingmic";
   newFloatingMic({Key? key}) : super(key: key);
 
   @override
@@ -75,13 +74,13 @@ class _newFloatingMic extends State<newFloatingMic> {
                   // If listening is active show the recognized words
                   _speechToText.isListening
                       ? '$_lastWords'
-                  // If listening isn't active but could be tell the user
-                  // how to start it, otherwise indicate that speech
-                  // recognition is not yet ready or not supported on
-                  // the target device
+                      // If listening isn't active but could be tell the user
+                      // how to start it, otherwise indicate that speech
+                      // recognition is not yet ready or not supported on
+                      // the target device
                       : _speechEnabled
-                      ? 'Tap the microphone to start listening...'
-                      : 'Speech not available',
+                          ? 'Tap the microphone to start listening...'
+                          : 'Speech not available',
                 ),
               ),
             ),
@@ -90,8 +89,8 @@ class _newFloatingMic extends State<newFloatingMic> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed:
-        // If not yet listening for speech start, otherwise stop
-        _speechToText.isNotListening ? _startListening : _stopListening,
+            // If not yet listening for speech start, otherwise stop
+            _speechToText.isNotListening ? _startListening : _stopListening,
         tooltip: 'Listen',
         child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
       ),
