@@ -1,13 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
-import 'package:pronounce_challenge/widget/floating_microphone.dart';
+import 'package:pronounce_challenge/modals/user_preferences.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
 import 'package:pronounce_challenge/screens/selection_screen.dart';
-import 'package:pronounce_challenge/modals/user_preferences.dart';
+import 'package:pronounce_challenge/widget/new_floating_microphone.dart';
 import 'package:provider/provider.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
+
 import '../modals/constants.dart';
 
 class EvilWordsScreen extends StatefulWidget {
@@ -21,6 +21,7 @@ class EvilWordsScreen extends StatefulWidget {
 
 class _EvilWordsScreen extends State<EvilWordsScreen> {
   int _indexCount = 0;
+
   String appBarInfo(List array) {
     return "${array.length}/${_indexCount + 1}";
   }
@@ -31,14 +32,21 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ChallengeData>(context, listen: false).setevilWordIndexText(_indexCount);
+      Provider.of<ChallengeData>(context, listen: false)
+          .setevilWordIndexText(_indexCount);
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
-      Provider.of<ChallengeData>(context, listen: false).admob.addAds(true, true, true);
+      Provider.of<ChallengeData>(context, listen: false)
+          .changeScreenContext("EvilWords Screen");
+      Provider.of<ChallengeData>(context, listen: false)
+          .admob
+          .addAds(true, true, true);
       print(Provider.of<ChallengeData>(context, listen: false).evilWordArray);
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
-      Provider.of<ChallengeData>(context, listen: false).setresultColor(kPrimaryColor);
-      Provider.of<ChallengeData>(context, listen: false).changeTextInput("Press the Microphone Button");
+      Provider.of<ChallengeData>(context, listen: false)
+          .setresultColor(kPrimaryColor);
+      Provider.of<ChallengeData>(context, listen: false)
+          .changeTextInput("Press the Microphone Button");
     });
   }
 
@@ -68,10 +76,11 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                 ],
               ),
             ),
-            floatingActionButton: FloatingMicrophoneInput(
+            floatingActionButton: NewfloatingMic(
               screenContext: EvilWordsScreen.id,
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
             body: Column(
               children: [
                 const SizedBox(
@@ -80,7 +89,8 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                 SizedBox(
                   height: 100,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -93,7 +103,8 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     chData.textInput,
-                                    style: kPrimaryTextStyle.copyWith(fontSize: 25),
+                                    style: kPrimaryTextStyle.copyWith(
+                                        fontSize: 25),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -145,13 +156,16 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                                 height: 80,
                                 width: 80,
                                 child: Card(
-                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50))),
                                   elevation: 10,
                                   color: kPrimaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "${chData.trys}",
@@ -176,7 +190,9 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                         Row(
                           children: [
                             ElevatedButton(
-                              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakEvil() : null,
+                              onPressed: chData.trys > 0 && !chData.isListening
+                                  ? () => chData.speakEvil()
+                                  : null,
                               child: const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Icon(
@@ -190,7 +206,9 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                               width: 10,
                             ),
                             ElevatedButton(
-                              onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakSlowEvil() : null,
+                              onPressed: chData.trys > 0 && !chData.isListening
+                                  ? () => chData.speakSlowEvil()
+                                  : null,
                               child: const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Icon(
@@ -207,7 +225,8 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                               onPressed: () {
                                 chData.changeTextInput(chData.pressText);
                                 chData.setresultColor(kPrimaryColor);
-                                if (_indexCount + 1 >= chData.evilWordArray.length) {
+                                if (_indexCount + 1 >=
+                                    chData.evilWordArray.length) {
                                   try {
                                     chData.admob!.showRewardedAd();
                                   } on Exception catch (e) {
@@ -222,9 +241,11 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ResultsScreen(
-                                              contextscreen: const EvilWordsScreen(),
+                                              contextscreen:
+                                                  const EvilWordsScreen(),
                                             )),
-                                    ModalRoute.withName("" + SelectionScreen.id),
+                                    ModalRoute.withName(
+                                        "" + SelectionScreen.id),
                                   );
                                 } else {
                                   setState(() {
@@ -248,9 +269,11 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                             ElevatedButton(
                               onPressed: () {
                                 if (chData.evilWordArray.length > 1) {
-                                  chData.showSnackBar(context, chData.evilWordArray[_indexCount], false);
+                                  chData.showSnackBar(context,
+                                      chData.evilWordArray[_indexCount], false);
                                   chData.removeEvilWordInIndex(_indexCount);
-                                  UserPreferences.setEvilWords(chData.evilWordArray);
+                                  UserPreferences.setEvilWords(
+                                      chData.evilWordArray);
                                 } else {
                                   Navigator.pop(context);
                                   chData.setShowEvilWordMenu(false);
@@ -259,7 +282,8 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                                   Timer(Duration(seconds: 1), () {
                                     chData.resetEvilWordArrayOneUseOnly();
 
-                                    UserPreferences.setEvilWords(chData.evilWordArray);
+                                    UserPreferences.setEvilWords(
+                                        chData.evilWordArray);
                                     print('removed');
                                   });
                                 }
@@ -279,7 +303,7 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                     ),
                   ),
                 ),
-                WaveWidget(
+                /*  WaveWidget(
                     waveFrequency: 3,
                     config: CustomConfig(
                       gradients: [
@@ -291,12 +315,14 @@ class _EvilWordsScreen extends State<EvilWordsScreen> {
                       gradientBegin: Alignment.bottomLeft,
                       gradientEnd: Alignment.topRight,
                       durations: [35000, 19440, 10800, 6000],
-                      heightPercentages: chData.isListening ? [0.20, 0.23, 0.25, 0.3] : [10, 10, 10, 10],
+                      heightPercentages: chData.isListening
+                          ? [0.20, 0.23, 0.25, 0.3]
+                          : [10, 10, 10, 10],
                       blur: const MaskFilter.blur(BlurStyle.outer, 10),
                     ),
                     waveAmplitude: 0,
                     heightPercentange: 0.2,
-                    size: const Size(double.infinity, 50)),
+                    size: const Size(double.infinity, 50)),*/
                 chData.admob.showBannerWidget(context)
               ],
             ));

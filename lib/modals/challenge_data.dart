@@ -5,9 +5,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:number_to_words/number_to_words.dart';
 import 'package:pronounce_challenge/api/admob_manager.dart';
 import 'package:pronounce_challenge/modals/user_preferences.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../screens/challenge_screen.dart';
 import '../screens/selection_screen.dart';
@@ -23,6 +26,15 @@ class ChallengeData extends ChangeNotifier {
   static bool? _adsRemovalPurchased = UserPreferences.getRemovalAdsBool();
 
   get adsRemovalPurchased => _adsRemovalPurchased;
+
+  String _screenContext = ChallengeScreen.id;
+
+  get screenContext => _screenContext;
+
+  void changeScreenContext(String newScreenContext) {
+    _screenContext = newScreenContext;
+    notifyListeners();
+  }
 
   //usally this will be set only once to true, unless the user asks for refund
   void setRemovalPurchased(bool state) {
@@ -99,8 +111,8 @@ class ChallengeData extends ChangeNotifier {
   }
 
   void checkResult(context) {
-    print('checking');
     if (_randomText == _textInput) {
+      stopListening();
       addPoints();
       audioCache.play('right.wav');
       setresultColor(Colors.green);
@@ -109,6 +121,8 @@ class ChallengeData extends ChangeNotifier {
       notifyListeners();
     } else {
       print("did not match");
+      audioCache.play('wrong.wav');
+      setresultColor(Colors.redAccent);
     }
   }
 
@@ -365,4 +379,111 @@ class ChallengeData extends ChangeNotifier {
   }
 
   String pressText = "Press the Microphone Button";
+
+  /// CUIDADO PUTEIRO ABAIXO
+  /// daqui em diante vai virar um puteiro do novo microphone
+  SpeechToText speechToText = SpeechToText();
+  bool speechEnabled = false;
+  String lastWords = '';
+  var other = RegExp('^[1-9]');
+
+  /// This has to happen only once per app
+  void initSpeech(context) async {
+    speechEnabled = await speechToText.initialize(
+      onStatus: (val) {
+        statusListener(val, context);
+      },
+      onError: errorHandler,
+    );
+    await _getLanguageIndex();
+    notifyListeners();
+  }
+
+  Future<void> _getLanguageIndex() async {
+    var locales = await speechToText.locales();
+    var localesId = [];
+    for (int i = 0; i < locales.length; i++) {
+      //log("${locales[i].localeId} $i ${locales[i].name} ");
+      localesId.add(locales[i].localeId);
+      //
+    }
+
+    //print(localesId.indexOf(context.read<ChallengeData>().languageChoosed));
+    //print(localesId[60]);
+  }
+
+  /// resolve various status listeners
+  void statusListener(val, context) {
+    print('onStatus:$val');
+    if (val == "listening") {
+      setresultColor(kPrimaryColor);
+      addTrys(context);
+      changeTextInput("Listening...");
+      changeListening(true);
+    } else if (val == "notListening") {
+      changeListening(false);
+    } else {
+      changeListening(false);
+    }
+    notifyListeners();
+  }
+
+  /// error handler
+  void errorHandler(val) {
+    print('onError:$val aaaaaa');
+    removeTrys();
+
+    changeTextInput("...Nothing heard");
+    notifyListeners();
+  }
+
+  /// Each time to start a speech recognition session
+  void startListening(context) async {
+    await speechToText.listen(
+        onResult: (val) {
+          _onSpeechResult(val, context);
+        },
+        localeId: languageChoosed,
+        cancelOnError: true,
+        pauseFor: Duration(milliseconds: 2000));
+    notifyListeners();
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  void stopListening() async {
+    await speechToText.stop();
+    notifyListeners();
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result, context) {
+    print("this is the result:$result");
+    if (result.finalResult) {
+      /// this one change the number like: 11 to eleven,
+      if (result.recognizedWords.contains(other)) {
+        String trimadaStringada =
+            NumberToWord().convert('en-in', int.parse(result.recognizedWords));
+        changeTextInput(trimadaStringada.trim());
+      } else {
+        changeTextInput(result.recognizedWords.toLowerCase());
+      }
+      screenContext == ChallengeScreen.id
+          ? checkResult(context)
+          : checkAnswerEvilWords();
+    }
+  }
+
+  Icon iconHandler() {
+    Icon icon;
+    if (speechToText.isNotListening) {
+      icon = Icon(Icons.mic_off, size: 40);
+    } else {
+      icon = Icon(Icons.mic, size: 40);
+    }
+    return icon;
+  }
 }

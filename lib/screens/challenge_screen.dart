@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
 import 'package:pronounce_challenge/widget/new_floating_microphone.dart';
 import 'package:provider/provider.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
+
 import '../modals/constants.dart';
-import '../widget/floating_microphone.dart';
 
 class ChallengeScreen extends StatefulWidget {
   static String id = "Challenge Screen";
@@ -25,12 +23,16 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChallengeData>(context, listen: false).nextRandomText();
-
+      Provider.of<ChallengeData>(context, listen: false).initSpeech(context);
       Provider.of<ChallengeData>(context, listen: false).resetPoints();
-      Provider.of<ChallengeData>(context, listen: false).admob!.addAds(true, true, true);
+      Provider.of<ChallengeData>(context, listen: false)
+          .admob!
+          .addAds(true, true, true);
       Provider.of<ChallengeData>(context, listen: false).resetChallengeNumber();
       Provider.of<ChallengeData>(context, listen: false).resetTrys();
       Provider.of<ChallengeData>(context, listen: false).resetWorldConts();
+      Provider.of<ChallengeData>(context, listen: false)
+          .changeScreenContext("Challenge Screen");
     });
   }
 
@@ -67,10 +69,11 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                 )
               ],
             ),
-            floatingActionButton: newFloatingMic(
+            floatingActionButton: NewfloatingMic(
               screenContext: ChallengeScreen.id,
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
             body: Column(
               children: [
                 Expanded(
@@ -82,7 +85,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                       SizedBox(
                         height: 100,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 10),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -95,7 +99,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           chData.textInput,
-                                          style: kPrimaryTextStyle.copyWith(fontSize: 25),
+                                          style: kPrimaryTextStyle.copyWith(
+                                              fontSize: 25),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -135,9 +140,11 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(right: 1, left: 6),
+                                padding:
+                                    const EdgeInsets.only(right: 1, left: 6),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       chData.randomText,
@@ -147,13 +154,16 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                       height: 80,
                                       width: 80,
                                       child: Card(
-                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))),
                                         elevation: 10,
                                         color: kPrimaryColor,
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Text(
                                                 "${chData.trys}",
@@ -178,7 +188,10 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                               Row(
                                 children: [
                                   ElevatedButton(
-                                    onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speak() : null,
+                                    onPressed: chData.trys > 0 &&
+                                            chData.speechToText.isNotListening
+                                        ? () => chData.speak()
+                                        : null,
                                     child: const Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Icon(
@@ -192,7 +205,10 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                     width: 10,
                                   ),
                                   ElevatedButton(
-                                    onPressed: chData.trys > 0 && !chData.isListening ? () => chData.speakSlow() : null,
+                                    onPressed: chData.trys > 0 &&
+                                            chData.speechToText.isNotListening
+                                        ? () => chData.speakSlow()
+                                        : null,
                                     child: const Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Icon(
@@ -206,7 +222,10 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                                     width: 10,
                                   ),
                                   ElevatedButton(
-                                    onPressed: chData.isListening == false ? () => chData.showAdstuff(context) : null,
+                                    onPressed:
+                                        chData.speechToText.isNotListening
+                                            ? () => chData.showAdstuff(context)
+                                            : null,
                                     child: const Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Icon(
@@ -222,7 +241,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                           ),
                         ),
                       ),
-                    /*  WaveWidget(
+                      /*  WaveWidget(
                           waveFrequency: 3,
                           config: CustomConfig(
                             gradients: [
