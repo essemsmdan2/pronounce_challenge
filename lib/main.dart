@@ -70,7 +70,7 @@ class _PronounceChallengeState extends State<PronounceChallenge> {
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: kPrimaryColor,
             )),
-        initialRoute: _firstTime ?? true ? OnBoardingPage.id : newFloatingMic.id,
+        initialRoute: _firstTime ?? true ? OnBoardingPage.id : SelectionScreen.id,
         routes: {
           DetailScreen.id: (context) => const DetailScreen(),
           ChallengeScreen.id: (context) => ChallengeScreen(
@@ -81,7 +81,7 @@ class _PronounceChallengeState extends State<PronounceChallenge> {
           OnBoardingPage.id: (context) => OnBoardingPage(),
           ChooseQnt.id: (context) => ChooseQnt(),
           EvilWordsScreen.id: (context) => const EvilWordsScreen(),
-          newFloatingMic.id: (context) => newFloatingMic(),
+          newFloatingMic.id: (context) => newFloatingMic(screenContext: ChallengeScreen.id  ,),
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pronounce_challenge/modals/challenge_data.dart';
+import 'package:pronounce_challenge/widget/new_floating_microphone.dart';
 import 'package:provider/provider.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -66,7 +67,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                 )
               ],
             ),
-            floatingActionButton: FloatingMicrophoneInput(
+            floatingActionButton: newFloatingMic(
               screenContext: ChallengeScreen.id,
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -221,7 +222,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                           ),
                         ),
                       ),
-                      WaveWidget(
+                    /*  WaveWidget(
                           waveFrequency: 3,
                           config: CustomConfig(
                             gradients: [
@@ -238,7 +239,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                           ),
                           waveAmplitude: 0,
                           heightPercentange: 0.2,
-                          size: const Size(double.infinity, 50)),
+                          size: const Size(double.infinity, 50)),*/
                     ],
                   ),
                 ),
