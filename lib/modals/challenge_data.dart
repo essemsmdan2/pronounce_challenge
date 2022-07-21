@@ -286,7 +286,10 @@ class ChallengeData extends ChangeNotifier {
 
       changeListening(false);
       notifyListeners();
-    } else if (_textInput == "...Try Again" || _textInput == "Processing..." || _textInput == "Listening..." || _textInput == "Press the Microphone Button") {
+    } else if (_textInput == "...Try Again" ||
+        _textInput == "Processing..." ||
+        _textInput == "Listening..." ||
+        _textInput == "Press the Microphone Button") {
       setresultColor(kPrimaryColor);
       notifyListeners();
     } else {
@@ -327,7 +330,9 @@ class ChallengeData extends ChangeNotifier {
       print('playing again');
       audioCache.play('right.wav');
       setresultColor(Colors.green);
-    } else if (_textInput == "...Try Again" || _textInput == "..." || _textInput == "Press the Microphone Button") {
+    } else if (_textInput == "...Try Again" ||
+        _textInput == "..." ||
+        _textInput == "Press the Microphone Button") {
       print('playing again ag');
 
       setresultColor(kPrimaryColor);
@@ -423,14 +428,13 @@ class ChallengeData extends ChangeNotifier {
         changeTextInput("Processing...");
       }
     } else {
-      if (textInput == "Listening...") {
+      if (textInput == "Listening..." || textInput == "Processing...") {
         changeTextInput('Nothing heard...');
-        if (Platform.isAndroid) {
-          removeTrys();
-        }
+
+        removeTrys();
+        changeListening(false);
+        stopListening();
       }
-      changeListening(false);
-      stopListening();
     }
     notifyListeners();
   }
@@ -475,12 +479,15 @@ class ChallengeData extends ChangeNotifier {
     } else if (result.finalResult) {
       /// this one change the number like: 11 to eleven,
       if (result.recognizedWords.contains(other)) {
-        String trimadaStringada = NumberToWord().convert('en-in', int.parse(result.recognizedWords));
+        String trimadaStringada =
+            NumberToWord().convert('en-in', int.parse(result.recognizedWords));
         changeTextInput(trimadaStringada.trim());
       } else {
         changeTextInput(result.recognizedWords.toLowerCase());
       }
-      screenContext == ChallengeScreen.id ? checkResult(context) : checkAnswerEvilWords();
+      screenContext == ChallengeScreen.id
+          ? checkResult(context)
+          : checkAnswerEvilWords();
     } else {
       if (Platform.isAndroid) {
         changeTextInput('Processing...');
