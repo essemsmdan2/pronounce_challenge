@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -9,6 +10,7 @@ import 'package:number_to_words/number_to_words.dart';
 import 'package:pronounce_challenge/api/admob_manager.dart';
 import 'package:pronounce_challenge/modals/user_preferences.dart';
 import 'package:pronounce_challenge/screens/results_screen.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -284,9 +286,7 @@ class ChallengeData extends ChangeNotifier {
 
       changeListening(false);
       notifyListeners();
-    } else if (_textInput == "...Try Again" ||
-        _textInput == "Listening..." ||
-        _textInput == "Press the Microphone Button") {
+    } else if (_textInput == "...Try Again" || _textInput == "Processing..." || _textInput == "Listening..." || _textInput == "Press the Microphone Button") {
       setresultColor(kPrimaryColor);
       notifyListeners();
     } else {
@@ -327,9 +327,7 @@ class ChallengeData extends ChangeNotifier {
       print('playing again');
       audioCache.play('right.wav');
       setresultColor(Colors.green);
-    } else if (_textInput == "...Try Again" ||
-        _textInput == "..." ||
-        _textInput == "Press the Microphone Button") {
+    } else if (_textInput == "...Try Again" || _textInput == "..." || _textInput == "Press the Microphone Button") {
       print('playing again ag');
 
       setresultColor(kPrimaryColor);
@@ -421,19 +419,29 @@ class ChallengeData extends ChangeNotifier {
       changeTextInput("Listening...");
       changeListening(true);
     } else if (val == "notListening") {
-      changeListening(false);
+      if (Platform.isIOS) {
+        changeTextInput("Processing...");
+      }
     } else {
+      if (textInput == "Listening...") {
+        changeTextInput('Nothing heard...');
+        if (Platform.isAndroid) {
+          removeTrys();
+        }
+      }
       changeListening(false);
+      stopListening();
     }
     notifyListeners();
   }
 
   /// error handler
-  void errorHandler(val) {
-    print('onError:$val aaaaaa');
+  void errorHandler(SpeechRecognitionError val) {
+    print('onError:${val.errorMsg} aaaaaa');
     removeTrys();
 
     changeTextInput("...Nothing heard");
+    stopListening();
     notifyListeners();
   }
 
@@ -445,7 +453,7 @@ class ChallengeData extends ChangeNotifier {
         },
         localeId: languageChoosed,
         cancelOnError: true,
-        pauseFor: Duration(milliseconds: 2000));
+        pauseFor: Duration(milliseconds: 2500));
     notifyListeners();
   }
 
@@ -462,18 +470,21 @@ class ChallengeData extends ChangeNotifier {
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result, context) {
     print("this is the result:$result");
-    if (result.finalResult) {
+    if (result.finalResult && result.confidence == -1.0) {
+      changeTextInput("Didn't undestand....");
+    } else if (result.finalResult) {
       /// this one change the number like: 11 to eleven,
       if (result.recognizedWords.contains(other)) {
-        String trimadaStringada =
-            NumberToWord().convert('en-in', int.parse(result.recognizedWords));
+        String trimadaStringada = NumberToWord().convert('en-in', int.parse(result.recognizedWords));
         changeTextInput(trimadaStringada.trim());
       } else {
         changeTextInput(result.recognizedWords.toLowerCase());
       }
-      screenContext == ChallengeScreen.id
-          ? checkResult(context)
-          : checkAnswerEvilWords();
+      screenContext == ChallengeScreen.id ? checkResult(context) : checkAnswerEvilWords();
+    } else {
+      if (Platform.isAndroid) {
+        changeTextInput('Processing...');
+      }
     }
   }
 
